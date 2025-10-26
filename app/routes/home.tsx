@@ -1,5 +1,7 @@
+import { ChatsList } from "~/components/chat/ChatsList";
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { MyChat } from "~/components/chat/MyChat";
+import { SidebarProvider } from "~/components/ui/sidebar";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +11,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <Welcome />;
+  return (
+    <SidebarProvider>
+      <ChatsList />
+        <MyChat />
+    </SidebarProvider>
+  );
 }
