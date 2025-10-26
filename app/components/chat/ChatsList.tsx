@@ -1,6 +1,12 @@
 import { format } from "date-fns";
 
-import { MoonIcon, MoreHorizontal, PlusIcon, SunIcon, TrashIcon } from "lucide-react";
+import {
+  MoonIcon,
+  MoreHorizontal,
+  PlusIcon,
+  SunIcon,
+  TrashIcon,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -25,6 +31,8 @@ import {
 } from "../ui/dropdown-menu";
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { DocumentsModal } from "./DocumentsModal";
 
 const items = [
   {
@@ -41,44 +49,60 @@ const items = [
 
 export const ChatsList = () => {
   const { setTheme, theme } = useTheme();
+  const [documentsOpen, setDocumentsOpen] = useState(false);
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <SidebarTrigger />
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-          <Button variant="secondary"><PlusIcon /> Nuevo chat</Button>
-          <SidebarGroupLabel>Conversaciones</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex justify-between h-15">
-                      <div className="flex flex-col">
-                        <span>{item.title}</span>
-                        <span className="text-xs text-muted-foreground">{format(item.date, "dd/MM/yyyy hh:mm bb")}</span>
-                      </div>
-                      <TrashIcon />
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <Button
-          size="icon"
-          variant="secondary"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        >
-          {theme === "dark" ? <MoonIcon /> : <SunIcon />}
-        </Button>
-      </SidebarFooter>
-    </Sidebar>
+    <>
+      <Sidebar collapsible="icon">
+        <SidebarHeader>
+          <SidebarTrigger />
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+            <Button variant="secondary">
+              <PlusIcon /> Nuevo chat
+            </Button>
+            <SidebarGroupLabel>Conversaciones</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url} className="flex justify-between h-15">
+                        <div className="flex flex-col">
+                          <span>{item.title}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {format(item.date, "dd/MM/yyyy hh:mm bb")}
+                          </span>
+                        </div>
+                        <TrashIcon />
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <Button
+            onClick={() => setDocumentsOpen(true)}
+            className="group-data-[collapsible=icon]:hidden"
+          >
+            Gestionar documentos
+          </Button>
+          <Button variant="ghost">Volver a bots</Button>
+          <Button
+            size="icon"
+            variant="secondary"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="group-data-[collapsible=icon]:hidden"
+          >
+            {theme === "dark" ? <MoonIcon /> : <SunIcon />}
+          </Button>
+        </SidebarFooter>
+      </Sidebar>
+      <DocumentsModal isOpen={documentsOpen} setIsOpen={setDocumentsOpen} />
+    </>
   );
 };

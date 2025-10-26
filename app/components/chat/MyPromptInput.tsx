@@ -56,11 +56,7 @@ export const MyPromptInput = ({ addMessage }: Props) => {
           placeholder="Type your message..."
         />
         <PromptInputToolbar>
-          <PromptInputTools>
-            <PromptInputButton>
-              <PaperclipIcon size={16} />
-            </PromptInputButton>
-          </PromptInputTools>
+          <div></div>
           <PromptInputSubmit disabled={!text} status={status} />
         </PromptInputToolbar>
       </PromptInput>
