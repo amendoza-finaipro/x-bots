@@ -1,5 +1,5 @@
 "use client";
-import { avatarIcon } from "@/components/assets";
+import { avatarIcon } from "@/components/assets/images";
 import {
   PromptInput,
   PromptInputButton,

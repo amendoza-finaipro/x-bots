@@ -33,6 +33,8 @@ import { useTheme } from "@/components/theme-provider";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { DocumentsModal } from "./DocumentsModal";
+import { Link } from "react-router";
+import { ThemeButton } from "../general/ThemeButton";
 
 const items = [
   {
@@ -91,15 +93,12 @@ export const ChatsList = () => {
           >
             Gestionar documentos
           </Button>
-          <Button variant="ghost">Volver a bots</Button>
-          <Button
-            size="icon"
-            variant="secondary"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="group-data-[collapsible=icon]:hidden"
-          >
-            {theme === "dark" ? <MoonIcon /> : <SunIcon />}
+          <Button variant="ghost" asChild>
+            <Link to="/" >
+              Volver a bots
+            </Link>
           </Button>
+          <ThemeButton className="group-data-[collapsible=icon]:hidden" />
         </SidebarFooter>
       </Sidebar>
       <DocumentsModal isOpen={documentsOpen} setIsOpen={setDocumentsOpen} />

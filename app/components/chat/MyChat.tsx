@@ -1,4 +1,4 @@
-import { avatarIcon, chatbotImage } from "@/components/assets";
+import { avatarIcon, chatbotImage } from "@/components/assets/images";
 import {
   Conversation,
   ConversationContent,

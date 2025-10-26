@@ -1,20 +1,17 @@
 import { ChatsList } from "~/components/chat/ChatsList";
-import type { Route } from "./+types/home";
 import { MyChat } from "~/components/chat/MyChat";
 import { SidebarProvider } from "~/components/ui/sidebar";
+import type { Route } from "./+types/bot.$botId.$chatId";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
-  ];
+  return [{ title: "Bot" }];
 }
 
-export default function Home() {
+export default function BotChatPage() {
   return (
     <SidebarProvider>
       <ChatsList />
-        <MyChat />
+      <MyChat />
     </SidebarProvider>
   );
 }
