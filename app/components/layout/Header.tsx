@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Menu } from "lucide-react";
+import { userMockData } from "~/data";
 
 const linkList = [
   { to: "/", label: "Mis bots" },
@@ -44,8 +45,9 @@ export const Header = () => {
       </div>
 
       {/* Sección derecha (botones) visible solo en escritorio */}
-      <div className="hidden md:flex gap-3">
+      <div className="hidden md:flex gap-3 items-center">
         <ThemeButton variant="ghost" />
+        <span className="text-xs text-muted-foreground">{userMockData.name}</span>
         <Button variant="secondary">Cerrar sesión</Button>
       </div>
 
@@ -85,7 +87,10 @@ export const Header = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <ThemeButton variant="outline" />
+              <div className="flex justify-between items-center">
+                <ThemeButton variant="outline" />
+                <span className="text-xs text-muted-foreground">{userMockData.name}</span>
+              </div>
               <Button variant="secondary">Cerrar sesión</Button>
             </div>
           </SheetContent>
