@@ -32,3 +32,18 @@ export interface Model {
   temperature: number;
   supports_reasoning: boolean;
 }
+
+export interface BotBlueprint {
+  message: string;
+  complexity: string;
+  response_length: string;
+  friendliness: string;
+  attachments: Attachment[];
+}
+
+export interface Attachment {
+  filename: string;
+  content_base64: string;
+  content_type: string;
+  size_bytes: number;
+}

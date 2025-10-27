@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getInitialThemeScript } from "./themeScript";
+import { Toaster } from "~/components/ui/sonner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -38,6 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <body>
           {children}
           <ScrollRestoration />
+          <Toaster richColors />
           {getInitialThemeScript()}
           <Scripts />
         </body>

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/shadcn-io/ai/message";
 import { useEffect, useState } from "react";
 import { MyPromptInput } from "./MyPromptInput";
-import type { MessageNoKey, MessageType } from "@/types";
+import type { MessageType, MessageNoKey } from "~/types";
 import { SidebarTrigger } from "../ui/sidebar";
 
 const messages: MessageType[] = [

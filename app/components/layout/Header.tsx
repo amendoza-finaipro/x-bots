@@ -21,14 +21,14 @@ const linkList = [
 export const Header = () => {
   return (
     <header className="p-5 flex items-center justify-between container mx-auto">
-      {/* Sección izquierda */}
+      
       <div className="flex items-center gap-12">
         <div className="flex gap-2 items-center">
           <Logo className="size-9" />
           <h1 className="font-bold">X-bots studio</h1>
         </div>
 
-        {/* Links visibles solo en pantallas medianas o mayores */}
+        
         <div className="hidden md:flex gap-5 text-sm text-muted-foreground">
           {linkList.map(({ to, label }) => (
             <NavLink
@@ -44,14 +44,14 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* Sección derecha (botones) visible solo en escritorio */}
+      
       <div className="hidden md:flex gap-3 items-center">
         <ThemeButton variant="ghost" />
         <span className="text-xs text-muted-foreground">{userMockData.name}</span>
         <Button variant="secondary">Cerrar sesión</Button>
       </div>
 
-      {/* Menú hamburguesa visible solo en mobile */}
+      
       <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
