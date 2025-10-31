@@ -4,6 +4,7 @@ import { userMockData } from "~/data";
 import { Button } from "~/components/ui/button";
 import { BotsList } from "~/components/home";
 import { Link } from "react-router";
+import { trpc } from "~/trpc/client";
 
 export function meta({}: Route.MetaArgs) {
   return [

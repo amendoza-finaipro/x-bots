@@ -1,7 +1,7 @@
 import { initTRPC } from "@trpc/server";
-import type { Context } from "../context";
+import { getHeaders, getUrlWithAK, type Context } from "../context";
 import { env } from "~/lib/env";
-import type { CreateBotResponse, GetModelRes, Model } from "~/types";
+import type { CreateBotResponse, GetModelRes, Model, Bot } from "~/types";
 import z, { string } from "zod";
 import { createBotSchema } from "../schemas";
 
@@ -12,13 +12,23 @@ export const botRouter = t.router({
     .input(createBotSchema)
     .mutation(async ({ ctx, input }): Promise<CreateBotResponse> => {
       const res = await fetch(`${env.BACKEND_BASE_URL}/orchestrator/chat`, {
-        headers: { "x-api-key": ctx.apiKey, "Content-Type": "application/json" },
+        headers: getHeaders(ctx),
         method: "POST",
-        body: JSON.stringify({...input, user_id: ctx.user.id}),
+        body: JSON.stringify({ ...input, user_id: ctx.user.id }),
       });
       if (!res.ok) {
         throw new Error("Error creating bot");
       }
       return res.json();
     }),
+  getAllBots: t.procedure.query(async ({ ctx }): Promise<{bots: Bot[]}> => {
+    const url = new URL(`${env.BACKEND_BASE_URL}/bots`);
+    const res = await fetch(getUrlWithAK({ url, ctx }), {
+      headers: getHeaders(ctx),
+    });
+    if (!res.ok) {
+      throw new Error("Error creating bot");
+    }
+    return res.json();
+  }),
 });
