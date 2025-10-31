@@ -1,6 +1,6 @@
 import { Header } from "~/components/layout/Header";
 import type { Route } from "./+types/_index";
-import { userMockData } from "~/data";
+import { userMockData } from "~/constants/data";
 import { Button } from "~/components/ui/button";
 import { BotsList } from "~/components/home";
 import { Link } from "react-router";

@@ -1,5 +1,5 @@
 import { avatarIcon } from "@/components/assets/images";
-import { userMockData } from "~/data";
+import { userMockData } from "~/constants/data";
 
 export const useUserMessage = () => {
   const addUserMessage = (value: string) => ({

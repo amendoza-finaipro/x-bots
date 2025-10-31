@@ -5,6 +5,7 @@ import  { Link } from 'react-router';
 import  { Button } from '../ui/button';
 import  { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
+import { Spinner } from '../ui/spinner';
 
 export const BotsListSkeleton = () => {
   return (
@@ -59,11 +60,11 @@ const BotCard = () => {
           </div>
         </CardContent>
         <CardFooter className="justify-between">
-          <Button variant="ghost">
-            Documentos
+          <Button variant="ghost" disabled>
+            <Spinner />
           </Button>
-          <Button>
-            Abrir bot
+          <Button disabled>
+            <Spinner />
           </Button>
         </CardFooter>
       </Card>

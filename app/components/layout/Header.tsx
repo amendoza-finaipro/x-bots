@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Menu } from "lucide-react";
-import { userMockData } from "~/data";
+import { userMockData } from "~/constants/data";
 
 const linkList = [
   { to: "/", label: "Mis bots" },

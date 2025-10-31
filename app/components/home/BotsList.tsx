@@ -1,4 +1,4 @@
-import { botsMockData, conversationsMockData } from "~/data";
+import { botsMockData, conversationsMockData } from "~/constants/data";
 import {
   Card,
   CardContent,
@@ -32,12 +32,14 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "../ui/empty";
+import { NEW_CONVERSATION } from "~/constants";
+import { Spinner } from "../ui/spinner";
 
 export const BotsList = () => {
   const [botDocumentsOpen, setBotDocumentsOpen] = useState(false);
   const { data: botsList, isLoading } = trpc.bot.getAllBots.useQuery();
 
-  if (isLoading || !botsList) return <BotsListSkeleton />
+  if (isLoading || !botsList) return <BotsListSkeleton />;
   if (!botsList) return <></>;
   if (botsList.bots.length === 0) {
     return (
@@ -88,11 +90,15 @@ const BotCard = ({
   bot: Bot;
   setBotDocumentsOpen: (value: boolean) => void;
 }) => {
+  const { data: allConversations, isLoading } =
+    trpc.conversation.getAllConversations.useQuery({ botId: bot.id });
+  console.log({ allConversations, bot: bot.name });
+
   const conversationId = useMemo(() => {
-    return conversationsMockData[0]
-      ? `/${conversationsMockData[0].conversation_id}`
-      : "";
-  }, []);
+    const firstConversation =
+      allConversations?.conversations?.[0]?.conversation_id;
+    return firstConversation ? `/${firstConversation}` : `/${NEW_CONVERSATION}`;
+  }, [allConversations]);
 
   return (
     <>
@@ -133,8 +139,10 @@ const BotCard = ({
           <Button variant="ghost" onClick={() => setBotDocumentsOpen(true)}>
             Documentos
           </Button>
-          <Button asChild>
-            <Link to={`bot/${bot.id}${conversationId}`}>Abrir bot</Link>
+          <Button asChild disabled={isLoading}>
+            <Link to={`bot/${bot.id}${conversationId}`}>
+              {isLoading ? <Spinner /> : "Abrir bot"}
+            </Link>
           </Button>
         </CardFooter>
       </Card>

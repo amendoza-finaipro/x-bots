@@ -1,4 +1,4 @@
-import { userMockData } from "~/data";
+import { userMockData } from "~/constants/data";
 
 type CreateContextOptions = {
   request: Request;
