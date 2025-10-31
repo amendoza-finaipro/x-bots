@@ -12,6 +12,9 @@ import "./app.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { getInitialThemeScript } from "./themeScript";
 import { Toaster } from "~/components/ui/sonner";
+import { trpc, trpcClient } from "~/trpc/client";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./trpc/queryClient";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -28,7 +31,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider  storageKey="vite-ui-theme">
+    <ThemeProvider storageKey="vite-ui-theme">
       <html lang="en">
         <head>
           <meta charSet="utf-8" />
@@ -49,7 +52,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <Outlet />
+      </QueryClientProvider>
+    </trpc.Provider>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

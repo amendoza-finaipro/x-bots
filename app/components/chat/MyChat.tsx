@@ -71,7 +71,6 @@ export const MyChat = () => {
     let currentIndex = 0;
     const interval = setInterval(() => {
       if (currentIndex < messages.length && messages[currentIndex]) {
-        console.log("Me ejecute")
         const currentMessage = messages[currentIndex];
         setVisibleMessages((prev) => [
           ...prev,

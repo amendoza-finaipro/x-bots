@@ -15,7 +15,8 @@ export interface MessageNoKey {
 
 export interface MessageOptionType {
   title: string;
-  description: string;
+  description?: string;
+  imageUrl?: string;
   value: string
 }
 

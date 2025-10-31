@@ -127,5 +127,18 @@
   body {
     @apply bg-background text-foreground;
   }
+
 }
 
+@keyframes attention-pulse {
+  0%, 100% {
+    background-color: transparent; /* chart-1 */
+  }
+  50% {
+    background-color: var(--secondary); /* chart-5 */
+  }
+}
+
+@theme {
+  --animate-attention-pulse: attention-pulse 1.5s ease-in-out infinite;
+}

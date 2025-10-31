@@ -8,6 +8,7 @@ import {
   getFileExtensionLabel,
   shortenFileName,
 } from "~/lib/file";
+import { cn } from "~/lib/utils";
 
 interface Props {
   files: File[] | null;
@@ -22,6 +23,7 @@ export const FilesPrompt = ({ files, setFiles }: Props) => {
       <Button
         variant="ghost"
         size="icon-lg"
+        className={cn(!files && "animate-attention-pulse")}
         onClick={() => fileInputRef.current?.click()}
       >
         <PaperclipIcon />

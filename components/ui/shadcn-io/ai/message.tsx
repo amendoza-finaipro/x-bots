@@ -47,7 +47,8 @@ export const MessageContent = ({
 
 interface MessageOptionProps {
   title: string;
-  description: string;
+  description?: string;
+  imageUrl?: string;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   selected?: boolean;
   className?: string;
@@ -56,6 +57,7 @@ interface MessageOptionProps {
 export const MessageOption = ({
   title,
   description,
+  imageUrl,
   onClick,
   selected,
   className,
@@ -63,15 +65,22 @@ export const MessageOption = ({
   return (
     <Button
       className={cn(
-        "flex flex-col gap-2 rounded-lg px-4 py-3 text-foreground text-sm bg-secondary max-w-40 whitespace-normal h-auto text-left justify-start items-start",
-        {"border-blue-500 dark:border-blue-500": selected},
+        "flex flex-col gap-2 rounded-lg px-4 py-3 text-foreground text-sm bg-accent dark:bg-accent max-w-40 whitespace-normal h-auto text-left justify-start items-start",
+        { "border-blue-500 dark:border-blue-500": selected },
         className
       )}
       variant="outline"
       onClick={onClick}
     >
+      {imageUrl && (
+        <div className="flex justify-center w-full">
+          <img src={imageUrl} alt="" className="size-20 " />
+        </div>
+      )}
       <span className="font-semibold">{title}</span>
-      <p className="text-xs text-muted-foreground">{description}</p>
+      {description && (
+        <p className="text-xs text-muted-foreground">{description}</p>
+      )}
     </Button>
   );
 };

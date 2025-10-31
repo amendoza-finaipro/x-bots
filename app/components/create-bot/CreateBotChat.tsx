@@ -12,23 +12,35 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import { MyPromptInput } from "../chat/MyPromptInput";
 import type { MessageType, MessageNoKey, BotBlueprint } from "~/types";
-import { createBotMessages } from "~/data/createBotMessages";
 import { useUserMessage } from "~/hooks";
-import { Input } from "../ui/input";
 import { fileToBase64 } from "~/lib/file";
+import { useCreateBotMessages } from "./useCreateBotMessages";
+import { CreatingBotDialog } from "./CreatingBotDialog";
+import { trpc } from "~/trpc/client";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export const CreateBotChat = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
-  console.log({ messages });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [body, setBody] = useState<BotBlueprint>({
+  const [body, setBody] = useState<Partial<BotBlueprint>>({
     attachments: [],
-    complexity: "",
-    response_length: "",
-    friendliness: "",
+    complexity: undefined,
+    response_length: undefined,
+    friendliness: undefined,
     message: "",
+    model_id: "",
   });
+  const navigate = useNavigate();
   const { addUserMessage } = useUserMessage();
+  const { botMessages } = useCreateBotMessages();
+  const { mutate: createBot, isPending: isCreateLoading } =
+    trpc.bot.createBot.useMutation({
+      onSuccess: (data) => {
+        navigate("/");
+        toast.success(`${data.blueprint.name} creado exitosamente`);
+      },
+    });
   const didRun = useRef(false);
 
   const addBodyValue = (key: keyof BotBlueprint, value: string) => {
@@ -38,7 +50,7 @@ export const CreateBotChat = () => {
 
   const nextBotMessage = () => {
     setTimeout(() => {
-      setMessages((current) => [...current, createBotMessages[currentIndex]]);
+      setMessages((current) => [...current, botMessages[currentIndex]]);
     }, 500);
     setCurrentIndex((index) => index + 1);
   };
@@ -70,10 +82,17 @@ export const CreateBotChat = () => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (messages.at(-1)?.key === 9) {
+      setTimeout(() => createBot(body as BotBlueprint), 1000);
+    }
+  }, [messages]);
+
   const getBodyFieldByKey = (key: number): keyof BotBlueprint => {
-    if (key === 4) return "complexity";
-    if (key === 5) return "friendliness";
-    if (key === 6) return "response_length";
+    if (key === 4) return "model_id";
+    if (key === 5) return "complexity";
+    if (key === 6) return "friendliness";
+    if (key === 7) return "response_length";
     throw new Error(`Key ${key} not supported`);
   };
 
@@ -89,7 +108,9 @@ export const CreateBotChat = () => {
             ({ key, value, name, avatar, options, expectedAnswer }) => (
               <div key={key}>
                 <Message from={name === "Assistant" ? "assistant" : "user"}>
-                  <MessageContent className="whitespace-pre-line">{value}</MessageContent>
+                  <MessageContent className="whitespace-pre-line">
+                    {value}
+                  </MessageContent>
                   <MessageAvatar name={name} src={avatar} />
                 </Message>
                 {options && (
@@ -99,11 +120,12 @@ export const CreateBotChat = () => {
                         key={option.title}
                         description={option.description}
                         title={option.title}
+                        imageUrl={option.imageUrl}
                         selected={body[getBodyFieldByKey(key)] === option.value}
                         onClick={() => {
                           if (key !== messages.at(-1)?.key) return;
                           addBodyValue(getBodyFieldByKey(key), option.value);
-                          addMessage(addUserMessage(option.value));
+                          addMessage(addUserMessage(option.title));
                         }}
                       />
                     ))}
@@ -132,6 +154,7 @@ export const CreateBotChat = () => {
         disabled={messages.at(-1)?.expectedAnswer !== "text"}
         type={messages.at(-1)?.expectedAnswer === "file" ? "file" : "text"}
       />
+      <CreatingBotDialog open={isCreateLoading} onOpenChange={() => {}} />
     </>
   );
 };

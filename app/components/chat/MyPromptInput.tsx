@@ -44,7 +44,6 @@ export const MyPromptInput = ({
       messageText = files.map(file => file.name).join("\n");
       setFiles(null);
     }
-    console.log({messageText});
     setStatus("submitted");
     setTimeout(() => {
       setStatus("streaming");
