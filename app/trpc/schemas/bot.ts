@@ -15,3 +15,19 @@ export const createBotSchema = z.object({
   model_id: z.string(),
   response_length: z.enum(["short", "medium", "long"]),
 });
+
+export const getDocumentsByBotSchema = z.object({
+  botId: z.string(),
+});
+
+export const deleteDocumentSchema = z.object({
+  documentId: z.string(),
+});
+
+export const addBotDocumentSchema = z.object({
+  bot_id: z.string(),
+  filename: z.string(),
+  content_base64: z.string(),
+  content_type: z.string(),
+  size_bytes: z.number(),
+});

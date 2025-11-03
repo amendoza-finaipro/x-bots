@@ -32,8 +32,8 @@ import {
 import { useTheme } from "@/components/theme-provider";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { DocumentsModal } from "./DocumentsModal";
-import { Link } from "react-router";
+import { DocumentsModal } from "../general/DocumentsModal";
+import { Link, useParams } from "react-router";
 import { ThemeButton } from "../general/ThemeButton";
 
 const items = [
@@ -52,6 +52,9 @@ const items = [
 export const ChatsList = () => {
   const { setTheme, theme } = useTheme();
   const [documentsOpen, setDocumentsOpen] = useState(false);
+  const { botId } = useParams<{botId: string}>();
+
+  if (!botId) return <></>;
 
   return (
     <>
@@ -101,7 +104,7 @@ export const ChatsList = () => {
           <ThemeButton className="group-data-[collapsible=icon]:hidden" />
         </SidebarFooter>
       </Sidebar>
-      <DocumentsModal isOpen={documentsOpen} setIsOpen={setDocumentsOpen} />
+      <DocumentsModal isOpen={documentsOpen} setIsOpen={setDocumentsOpen} botId={botId} />
     </>
   );
 };

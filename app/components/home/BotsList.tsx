@@ -17,7 +17,7 @@ import {
   RulerIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
-import { DocumentsModal } from "../chat/DocumentsModal";
+import { DocumentsModal } from "../general/DocumentsModal";
 import type { Bot } from "~/types";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
@@ -36,7 +36,7 @@ import { NEW_CONVERSATION } from "~/constants";
 import { Spinner } from "../ui/spinner";
 
 export const BotsList = () => {
-  const [botDocumentsOpen, setBotDocumentsOpen] = useState(false);
+  const [botDocumentsId, setBotDocumentsId] = useState<null | string>(null);
   const { data: botsList, isLoading } = trpc.bot.getAllBots.useQuery();
 
   if (isLoading || !botsList) return <BotsListSkeleton />;
@@ -68,31 +68,33 @@ export const BotsList = () => {
 
   return (
     <>
-      <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 pt-15">
+      <ul className="grid lg:grid-cols-2 gap-5 pt-15">
         {botsList.bots.map((bot) => (
           <li key={bot.id}>
-            <BotCard bot={bot} setBotDocumentsOpen={setBotDocumentsOpen} />
+            <BotCard bot={bot} setBotDocumentsId={setBotDocumentsId} />
           </li>
         ))}
       </ul>
-      <DocumentsModal
-        isOpen={botDocumentsOpen}
-        setIsOpen={setBotDocumentsOpen}
-      />
+      {botDocumentsId && (
+        <DocumentsModal
+          isOpen={Boolean(botDocumentsId)}
+          setIsOpen={(value) => !value && setBotDocumentsId(null)}
+          botId={botDocumentsId}
+        />
+      )}
     </>
   );
 };
 
 const BotCard = ({
   bot,
-  setBotDocumentsOpen,
+  setBotDocumentsId,
 }: {
   bot: Bot;
-  setBotDocumentsOpen: (value: boolean) => void;
+  setBotDocumentsId: (value: string) => void;
 }) => {
   const { data: allConversations, isLoading } =
     trpc.conversation.getAllConversations.useQuery({ botId: bot.id });
-  console.log({ allConversations, bot: bot.name });
 
   const conversationId = useMemo(() => {
     const firstConversation =
@@ -109,11 +111,22 @@ const BotCard = ({
           <CardDescription>{bot.description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2 text-xs text-muted-foreground pb-5 items-center">
-            <ClockIcon className="size-4" />
-            Actualizado
-            <span>{format(new Date(bot.updated_at), "dd/MM/yyyy")},</span>
-            <span>{format(new Date(bot.updated_at), "hh:mm bb")}</span>
+          <div className="flex justify-between flex-wrap pb-2">
+            <div className="flex gap-2 text-xs text-muted-foreground pb-5 items-center">
+              <ClockIcon className="size-4" />
+              Actualizado
+              <span>{format(new Date(bot.updated_at), "dd/MM/yyyy")},</span>
+              <span>{format(new Date(bot.updated_at), "hh:mm bb")}</span>
+            </div>
+            <div className="bg-accent py-2 px-4 rounded-lg border w-fit flex gap-4">
+              <img src={bot.model.icon_url} className="size-8" alt="" />
+              <div className="flex flex-col gap-0.5">
+                <span className="text-muted-foreground text-xs font-semibold">
+                  MODELO
+                </span>
+                <span className="text-sm font-bold">{bot.model.name}</span>
+              </div>
+            </div>
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex gap-2">
@@ -136,7 +149,7 @@ const BotCard = ({
           </div>
         </CardContent>
         <CardFooter className="justify-between">
-          <Button variant="ghost" onClick={() => setBotDocumentsOpen(true)}>
+          <Button variant="ghost" onClick={() => setBotDocumentsId(bot.id)}>
             Documentos
           </Button>
           <Button asChild disabled={isLoading}>

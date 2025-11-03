@@ -1,3 +1,4 @@
-export type { Bot, BotBlueprint, CreateBotResponse } from "./Bot";
+export type { Bot, BotBlueprint, CreateBotResponse, Attachment } from "./Bot";
+export type { BotDocument, BotDocumentBody } from "./BotDocument";
 export type { MessageNoKey, MessageType, MessageOptionType, answerTypes } from "./Message";
 export type { GetModelRes, Model } from "./Model";
