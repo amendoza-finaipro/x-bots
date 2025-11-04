@@ -5,4 +5,9 @@ export {
   getDocumentsByBotSchema,
   deleteDocumentSchema,
 } from "./bot";
-export { getAllConversationsSchema } from "./conversations";
+export {
+  getAllConversationsSchema,
+  deleteConversationSchema,
+  getConversationByIdSchema,
+  sendMessageSchema,
+} from "./conversations";

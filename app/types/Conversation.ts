@@ -26,9 +26,17 @@ export interface Memory {
 
 export interface Message {
   id: string;
-  role: string;
+  role: "user" | "assistant";
   content: string;
   created_at: Date;
 }
 
+export interface SendMessageRes {
+  session_id: string;
+  messages: SendMessageResItem[];
+}
 
+export interface SendMessageResItem {
+  role: string;
+  content: string;
+}

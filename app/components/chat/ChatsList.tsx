@@ -1,10 +1,7 @@
 import { format } from "date-fns";
 
 import {
-  MoonIcon,
-  MoreHorizontal,
   PlusIcon,
-  SunIcon,
   TrashIcon,
 } from "lucide-react";
 import {
@@ -16,43 +13,31 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
-  SidebarRail,
   SidebarTrigger,
 } from "../ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "../ui/dropdown-menu";
-import { useTheme } from "@/components/theme-provider";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { DocumentsModal } from "../general/DocumentsModal";
 import { Link, useParams } from "react-router";
 import { ThemeButton } from "../general/ThemeButton";
-
-const items = [
-  {
-    title: "Chat 1",
-    date: "2025-10-26",
-    url: "/",
-  },
-  {
-    title: "Chat 2",
-    date: "2025-10-26",
-    url: "/",
-  },
-];
+import { trpc } from "~/trpc/client";
+import { toast } from "sonner";
 
 export const ChatsList = () => {
-  const { setTheme, theme } = useTheme();
   const [documentsOpen, setDocumentsOpen] = useState(false);
-  const { botId } = useParams<{botId: string}>();
+  const { botId } = useParams<{ botId: string }>();
+  const utils = trpc.useUtils();
+  const { data: conversations } =
+    trpc.conversation.getAllConversations.useQuery({ botId: botId! });
+  const { mutate: deleteConversation } =
+    trpc.conversation.deleteConversation.useMutation({
+      onSuccess: () => {
+        utils.conversation.getAllConversations.invalidate();
+        toast.success("Conversation deleted successfully");
+      },
+    });
 
   if (!botId) return <></>;
 
@@ -70,18 +55,36 @@ export const ChatsList = () => {
             <SidebarGroupLabel>Conversaciones</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                {conversations?.conversations.map((conversation) => (
+                  <SidebarMenuItem key={conversation.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url} className="flex justify-between h-15">
+                      <Link
+                        to={`/bot/${botId}/${conversation.conversation_id}`}
+                        className="flex justify-between h-15"
+                      >
                         <div className="flex flex-col">
-                          <span>{item.title}</span>
+                          <span>{conversation.title}</span>
                           <span className="text-xs text-muted-foreground">
-                            {format(item.date, "dd/MM/yyyy hh:mm bb")}
+                            {format(
+                              conversation.created_at,
+                              "dd/MM/yyyy hh:mm bb"
+                            )}
                           </span>
                         </div>
-                        <TrashIcon />
-                      </a>
+                        <Button
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const { conversation_id, bot_id } = conversation;
+                            deleteConversation({
+                              conversationId: conversation_id,
+                              botId: bot_id,
+                            });
+                          }}
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -97,14 +100,16 @@ export const ChatsList = () => {
             Gestionar documentos
           </Button>
           <Button variant="ghost" asChild>
-            <Link to="/" >
-              Volver a bots
-            </Link>
+            <Link to="/">Volver a bots</Link>
           </Button>
           <ThemeButton className="group-data-[collapsible=icon]:hidden" />
         </SidebarFooter>
       </Sidebar>
-      <DocumentsModal isOpen={documentsOpen} setIsOpen={setDocumentsOpen} botId={botId} />
+      <DocumentsModal
+        isOpen={documentsOpen}
+        setIsOpen={setDocumentsOpen}
+        botId={botId}
+      />
     </>
   );
 };
