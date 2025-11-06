@@ -1,5 +1,5 @@
 import { initTRPC } from "@trpc/server";
-import { getHeaders, getUrlWithAK, type Context } from "../context";
+import { getHeaders, getUrlWithUID, type Context } from "../context";
 import { env } from "~/lib/env";
 import type { CreateBotResponse, Bot, BotDocument } from "~/types";
 import { addBotDocumentSchema, createBotSchema, deleteDocumentSchema, getDocumentsByBotSchema } from "../schemas";
@@ -22,7 +22,7 @@ export const botRouter = t.router({
     }),
   getAllBots: t.procedure.query(async ({ ctx }): Promise<{ bots: Bot[] }> => {
     const url = new URL(`${env.BACKEND_BASE_URL}/bots`);
-    const res = await fetch(getUrlWithAK({ url, ctx }), {
+    const res = await fetch(getUrlWithUID({ url, ctx }), {
       headers: getHeaders(ctx),
     });
     if (!res.ok) {
@@ -34,7 +34,7 @@ export const botRouter = t.router({
     .input(getDocumentsByBotSchema)
     .query(async ({ input, ctx }): Promise<{ documents: BotDocument[] }> => {
       const url = new URL(`${env.BACKEND_BASE_URL}/documents/bots/${input.botId}`);
-      const res = await fetch(getUrlWithAK({ url, ctx }), {
+      const res = await fetch(getUrlWithUID({ url, ctx }), {
         headers: getHeaders(ctx),
       });
       if (!res.ok) {
@@ -60,7 +60,7 @@ export const botRouter = t.router({
     .input(deleteDocumentSchema)
     .mutation(async ({ input, ctx }): Promise<BotDocument> => {
       const url = new URL(`${env.BACKEND_BASE_URL}/documents/${input.documentId}`);
-      const res = await fetch(getUrlWithAK({ url, ctx }), {
+      const res = await fetch(getUrlWithUID({ url, ctx }), {
         headers: getHeaders(ctx),
         method: "DELETE",
       });
