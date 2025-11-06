@@ -10,28 +10,14 @@ import {
   MessageContent,
 } from "@/components/ui/shadcn-io/ai/message";
 import { SidebarTrigger } from "../ui/sidebar";
-import { trpc } from "~/trpc/client";
-import { useParams } from "react-router";
 import { userMockData } from "~/constants/data";
-import type { MessageNoKey } from "~/types";
 import { MyPromptInput } from "./MyPromptInput";
+import { TypingIndicator } from "../ui/typing-indicator";
+import { useChat } from "./useChat";
 
 export const MyChat = () => {
-  const { botId, chatId } = useParams<{ botId: string; chatId: string }>();
-  const { data: conversation } = trpc.conversation.getConversationById.useQuery(
-    {
-      botId: botId!,
-      conversationId: chatId!,
-      // TODO: change pages when available
-      page: 1,
-    }
-  );
-  const {  } = trpc.conversation.sendMessage.useMutation();
-  const messages = conversation?.messages;
-
-  const addMessage = (message: MessageNoKey) => {
-    
-  };
+  
+  const {messages, isBotPending, addMessage} = useChat();
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -40,7 +26,7 @@ export const MyChat = () => {
         <h1 className="text-lg font-bold">x-bots</h1>
       </header>
       <Conversation className="relative size-full grow">
-        <ConversationContent>
+        <ConversationContent >
           {messages?.map(({ id, content, role }) => {
             const [name, avatar] =
               role === "user"
@@ -48,11 +34,14 @@ export const MyChat = () => {
                 : ["assistant", chatbotImage];
             return (
               <Message from={role} key={id}>
-                <MessageContent className="whitespace-break-spaces">{content}</MessageContent>
+                <MessageContent className="whitespace-break-spaces">
+                  {content}
+                </MessageContent>
                 <MessageAvatar name={name} src={avatar} />
               </Message>
             );
           })}
+          {isBotPending && <TypingIndicator />}
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
