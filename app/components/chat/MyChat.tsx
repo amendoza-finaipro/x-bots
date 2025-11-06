@@ -14,10 +14,11 @@ import { userMockData } from "~/constants/data";
 import { MyPromptInput } from "./MyPromptInput";
 import { TypingIndicator } from "../ui/typing-indicator";
 import { useChat } from "./useChat";
+import Markdown from "react-markdown";
+import { MDComponents } from "~/mdx-components";
 
 export const MyChat = () => {
-  
-  const {messages, isBotPending, addMessage} = useChat();
+  const { messages, isBotPending, addMessage } = useChat();
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -26,7 +27,7 @@ export const MyChat = () => {
         <h1 className="text-lg font-bold">x-bots</h1>
       </header>
       <Conversation className="relative size-full grow">
-        <ConversationContent >
+        <ConversationContent>
           {messages?.map(({ id, content, role }) => {
             const [name, avatar] =
               role === "user"
@@ -34,8 +35,10 @@ export const MyChat = () => {
                 : ["assistant", chatbotImage];
             return (
               <Message from={role} key={id}>
-                <MessageContent className="whitespace-break-spaces">
-                  {content}
+                <MessageContent>
+                  <Markdown components={MDComponents}>
+                    {content}
+                  </Markdown>
                 </MessageContent>
                 <MessageAvatar name={name} src={avatar} />
               </Message>
