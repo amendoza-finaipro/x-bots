@@ -1,9 +1,6 @@
 import { format } from "date-fns";
 
-import {
-  PlusIcon,
-  TrashIcon,
-} from "lucide-react";
+import { PlusIcon, TrashIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -34,7 +31,7 @@ export const ChatsList = () => {
   const { mutate: deleteConversation } =
     trpc.conversation.deleteConversation.useMutation({
       onSuccess: () => {
-        utils.conversation.getAllConversations.invalidate();
+        utils.conversation.getAllConversations.refetch();
         toast.success("Conversation deleted successfully");
       },
     });
@@ -59,10 +56,11 @@ export const ChatsList = () => {
               <SidebarMenu>
                 {conversations?.conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton  className="flex h-15 gap-0 p-0">
+                      <div className="contents">
                       <Link
                         to={`/bot/${botId}/${conversation.conversation_id}`}
-                        className="flex justify-between h-15"
+                        className="flex items-center h-15 grow p-2"
                       >
                         <div className="flex flex-col">
                           <span>{conversation.title}</span>
@@ -73,20 +71,22 @@ export const ChatsList = () => {
                             )}
                           </span>
                         </div>
-                        <Button
-                          variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            const { conversation_id, bot_id } = conversation;
-                            deleteConversation({
-                              conversationId: conversation_id,
-                              botId: bot_id,
-                            });
-                          }}
-                        >
-                          <TrashIcon />
-                        </Button>
                       </Link>
+                      <Button
+                        variant="ghost"
+                        className="h-full hover:bg-destructive/20 dark:hover:bg-destructive/20"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const { conversation_id, bot_id } = conversation;
+                          deleteConversation({
+                            conversationId: conversation_id,
+                            botId: bot_id,
+                          });
+                        }}
+                      >
+                        <TrashIcon />
+                      </Button>
+                      </div>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
