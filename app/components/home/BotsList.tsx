@@ -32,7 +32,7 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "../ui/empty";
-import { NEW_CONVERSATION } from "~/constants";
+import { NEW_CHAT_ID } from "~/constants";
 import { Spinner } from "../ui/spinner";
 
 export const BotsList = () => {
@@ -99,7 +99,7 @@ const BotCard = ({
   const conversationId = useMemo(() => {
     const firstConversation =
       allConversations?.conversations?.[0]?.conversation_id;
-    return firstConversation ? `/${firstConversation}` : `/${NEW_CONVERSATION}`;
+    return firstConversation ? `/${firstConversation}` : `/${NEW_CHAT_ID}`;
   }, [allConversations]);
 
   return (

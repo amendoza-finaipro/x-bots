@@ -3,6 +3,9 @@ import z from "zod";
 export const getAllConversationsSchema = z.object({
   botId: z.string(),
 });
+export const createConversationSchema = z.object({
+  botId: z.string(),
+});
 
 export const deleteConversationSchema = z.object({
   botId: z.string(),

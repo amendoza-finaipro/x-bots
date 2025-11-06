@@ -5,9 +5,9 @@ export interface Conversation {
   title: string;
   summary: string;
   language: string;
-  created_at: Date;
-  updated_at: Date;
-  last_summary_at: Date;
+  created_at: string;
+  updated_at: string;
+  last_summary_at: string;
   memories: Memory[];
   messages: Message[];
   messages_total: number;
@@ -19,7 +19,7 @@ export interface Conversation {
 export interface Memory {
   content: string;
   language: string;
-  created_at: Date;
+  created_at: string;
   user_goals: string[];
   assistant_commitments: string[];
 }
@@ -28,7 +28,7 @@ export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  created_at: Date;
+  created_at: string;
 }
 
 export interface SendMessageRes {

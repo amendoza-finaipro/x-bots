@@ -49,8 +49,10 @@ export const ChatsList = () => {
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <Button variant="secondary">
-              <PlusIcon /> Nuevo chat
+            <Button variant="secondary" asChild>
+              <Link to={`/bot/${botId}/new`}>
+                <PlusIcon /> Nuevo chat
+              </Link>
             </Button>
             <SidebarGroupLabel>Conversaciones</SidebarGroupLabel>
             <SidebarGroupContent>

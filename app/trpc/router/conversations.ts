@@ -63,14 +63,12 @@ export const conversationRouter = t.router({
     }),
   createConversation: t.procedure
     .input(createConversationSchema)
-    .mutation(async ({ ctx, input }): Promise<null> => {
+    .mutation(async ({ ctx, input }): Promise<Conversation> => {
       const { botId } = input;
-      const url = new URL(
-        `${env.BACKEND_BASE_URL}/bots/${botId}/conversations`
-      );
-      const res = await fetch(getUrlWithUID({ url, ctx }), {
+      const res = await fetch(`${env.BACKEND_BASE_URL}/bots/${botId}/conversations`, {
         headers: getHeaders(ctx),
-        method: "DELETE",
+        method: "POST",
+        body: JSON.stringify({ user_id: ctx.user.id })
       });
       if (!res.ok) {
         throw new Error("Error deleting conversation");

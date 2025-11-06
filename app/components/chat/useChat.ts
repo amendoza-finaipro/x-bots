@@ -1,9 +1,20 @@
-import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { NEW_CHAT_ID, NEW_CONVERSATION_NAME } from "~/constants";
 import { trpc } from "~/trpc/client";
-import type { MessageNoKey } from "~/types";
+import type { Conversation, MessageNoKey } from "~/types";
 
 export const useChat = () => {
-  const { botId, chatId } = useParams<{ botId: string; chatId: string }>();
+  const { botId, chatId: chatIdParams } = useParams<{
+    botId: string;
+    chatId: string;
+  }>();
+  const navigate = useNavigate();
+  const [chatId, setChatId] = useState(chatIdParams);
+
+  useEffect(() => {
+    setChatId(chatIdParams);
+  }, [chatIdParams]);
 
   const conversationData = {
     botId: botId!,
@@ -12,10 +23,15 @@ export const useChat = () => {
     page: 1,
   };
 
-  const { data: conversation } =
-    trpc.conversation.getConversationById.useQuery(conversationData);
+  const { data: conversation } = trpc.conversation.getConversationById.useQuery(
+    conversationData,
+    {
+      enabled: Boolean(chatId) && chatId !== NEW_CHAT_ID,
+    }
+  );
+
   const utils = trpc.useUtils();
-  const { mutate: sendMessage, isPending: isBotPending } =
+  const { mutateAsync: sendMessage, isPending: isBotPending } =
     trpc.conversation.sendMessage.useMutation({
       onMutate: async (message) => {
         utils.conversation.getConversationById.setData(
@@ -58,16 +74,63 @@ export const useChat = () => {
             };
           }
         );
+        const allConversations = utils.conversation.getAllConversations.getData(
+          { botId: botId! }
+        );
+        const someConversationIsNew = allConversations?.conversations.some(
+          (conversation) => conversation.title === NEW_CONVERSATION_NAME
+        );
+        if (someConversationIsNew) {
+          utils.conversation.getAllConversations.refetch();
+        }
       },
     });
-  const messages = conversation?.messages;
 
-  const addMessage = (message: MessageNoKey) =>
-    sendMessage({
-      botId: botId!,
-      conversationId: chatId!,
-      message: message.value,
+  const { mutateAsync: createConversation } =
+    trpc.conversation.createConversation.useMutation({
+      onSuccess: (data) => {
+        utils.conversation.getAllConversations.setData(
+          { botId: botId! },
+          (old) =>
+            old && {
+              conversations: [
+                { ...data, title: NEW_CONVERSATION_NAME },
+                ...old?.conversations,
+              ],
+            }
+        );
+      },
     });
 
-  return { messages, isBotPending, addMessage };
+  const messages = conversation?.messages;
+
+  const addMessage = async (message: MessageNoKey) => {
+    let currentChatId = chatId;
+    if (currentChatId === NEW_CHAT_ID) {
+      const data = await createConversation({ botId: botId! });
+      currentChatId = data.conversation_id;
+      setChatId(data.conversation_id);
+      navigate(`/bot/${botId}/${currentChatId}`);
+    }
+    await sendMessage({
+      botId: botId!,
+      conversationId: currentChatId!,
+      message: message.value,
+    });
+    checkNewConversationName();
+  };
+
+  const checkNewConversationName = () => {
+    const allConversations = utils.conversation.getAllConversations.getData({
+      botId: botId!,
+    });
+    const someConversationIsNew = allConversations?.conversations.some(
+      (conversation) => conversation.title === NEW_CONVERSATION_NAME
+    );
+    if (someConversationIsNew) {
+      utils.conversation.getAllConversations.refetch();
+    }
+  };
+
+  return { messages, isBotPending, addMessage, chatId };
 };

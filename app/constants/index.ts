@@ -1,1 +1,1 @@
-export { NEW_CONVERSATION } from "./newConversation";
+export { NEW_CHAT_ID, NEW_CONVERSATION_NAME } from "./newConversation";
