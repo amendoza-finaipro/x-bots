@@ -68,7 +68,7 @@ export const BotsList = () => {
 
   return (
     <>
-      <ul className="grid lg:grid-cols-2 gap-5 pt-15">
+      <ul className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-15">
         {botsList.bots.map((bot) => (
           <li key={bot.id}>
             <BotCard bot={bot} setBotDocumentsId={setBotDocumentsId} />
