@@ -9,7 +9,7 @@ import { Spinner } from '../ui/spinner';
 
 export const BotsListSkeleton = () => {
   return (
-    <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 pt-15">
+    <ul className="grid md:grid-cols-2 gap-5 pt-15">
         {[1, 2, 3].map((bot) => (
           <li key={bot}>
             <BotCard />
