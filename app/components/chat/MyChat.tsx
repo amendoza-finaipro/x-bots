@@ -21,6 +21,7 @@ import { useWriteText } from "~/hooks";
 import { Button } from "../ui/button";
 import { Settings } from "lucide-react";
 import { BotConfigModal } from "../general/BotConfigModal";
+import { Logo } from "@/components/assets/icons";
 
 export const MyChat = () => {
   const {
@@ -38,6 +39,7 @@ export const MyChat = () => {
       <div className="w-full h-screen flex flex-col">
         <header className="h-14 flex items-center gap-4 px-4 bg-sidebar">
           <SidebarTrigger className="lg:hidden" />
+          <Logo />
           <h1 className="text-lg font-bold">{botInfo?.name}</h1>
           <Button
             size="sm"

@@ -18,8 +18,8 @@ export const Logo = (props: React.SVGAttributes<SVGSVGElement>) => {
       <circle cx="16" cy="16" r="16" fill="url(#grad)" />
 
       <text
-        x="50%"
-        y="50%"
+        x="50.5%"
+        y="53%"
         dominantBaseline="middle"
         textAnchor="middle"
         fill="#fff"
