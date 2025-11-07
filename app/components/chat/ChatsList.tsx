@@ -57,7 +57,7 @@ export const ChatsList = () => {
             <SidebarGroupContent className="group-data-[collapsible=icon]:hidden">
               <SidebarMenu>
                 {conversations?.conversations.map((conversation) => (
-                  <SidebarMenuItem key={conversation.title}>
+                  <SidebarMenuItem key={conversation.conversation_id}>
                     <SidebarMenuButton
                       className={cn("flex h-15 gap-0 p-0", {
                         "bg-input": conversation.conversation_id === chatId,
