@@ -133,12 +133,13 @@ export const BotCard = ({
         </CardFooter>
       </Card>
       <ConfirmationModal
-        message={`Seguro de eliminar el bot ${bot.name}?`}
         onConfirm={() => deleteBot({ botId: bot.id })}
         onOpenChange={setOpenDelete}
         open={openDelete}
         isLoading={isDeleting}
-      />
+      >
+        ¿Seguro de eliminar el bot <b>{bot.name}</b>?
+      </ConfirmationModal>
     </>
   );
 };

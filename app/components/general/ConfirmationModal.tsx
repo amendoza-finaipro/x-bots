@@ -12,7 +12,7 @@ import { Spinner } from "../ui/spinner";
 interface Props {
   open: boolean;
   onOpenChange: (value: boolean) => void;
-  message: string;
+  children: React.ReactNode;
   onConfirm: () => void;
   isLoading?: boolean;
 }
@@ -20,7 +20,7 @@ interface Props {
 export const ConfirmationModal = ({
   open,
   onOpenChange,
-  message,
+  children,
   onConfirm,
   isLoading,
 }: Props) => {
@@ -29,7 +29,7 @@ export const ConfirmationModal = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Atención</DialogTitle>
-          <DialogDescription>{message}</DialogDescription>
+          <DialogDescription>{children}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
@@ -40,7 +40,9 @@ export const ConfirmationModal = ({
             {isLoading && <Spinner />}
             Eliminar
           </Button>
-          <Button variant="secondary">Cancelar</Button>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

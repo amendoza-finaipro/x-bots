@@ -26,6 +26,7 @@ import type { Conversation } from "~/types";
 import { useFirstConversation } from "~/hooks";
 import { NEW_CONVERSATION_NAME } from "~/constants";
 import { cn } from "~/lib/utils";
+import { ConfirmationModal } from "../general";
 
 export const ChatsList = () => {
   const [documentsOpen, setDocumentsOpen] = useState(false);
@@ -59,9 +60,12 @@ export const ChatsList = () => {
                 {conversations?.conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.conversation_id}>
                     <div
-                      className={cn("flex h-15 gap-0 p-0 hover:bg-accent rounded", {
-                        "bg-input": conversation.conversation_id === chatId,
-                      })}
+                      className={cn(
+                        "flex h-15 gap-0 p-0 hover:bg-accent rounded",
+                        {
+                          "bg-input": conversation.conversation_id === chatId,
+                        }
+                      )}
                     >
                       <div className="contents">
                         <Link
@@ -125,6 +129,7 @@ const DeleteConversationButton = ({
   const navigate = useNavigate();
   const { chatId, botId } = useParams<{ chatId: string; botId: string }>();
   const { firstConversation } = useFirstConversation({ botId: botId! });
+  const [isConfirming, setIsConfirming] = useState(false);
   const { mutate: deleteConversation, isPending: isDeleting } =
     trpc.conversation.deleteConversation.useMutation({
       onSuccess: async () => {
@@ -136,20 +141,28 @@ const DeleteConversationButton = ({
       },
     });
   return (
-    <Button
-      variant="ghost"
-      className="h-full hover:bg-destructive/20 dark:hover:bg-destructive/20"
-      onClick={(e) => {
-        e.stopPropagation();
-        const { conversation_id, bot_id } = conversation;
-        deleteConversation({
-          conversationId: conversation_id,
-          botId: bot_id,
-        });
-      }}
-      disabled={isDeleting}
-    >
-      {isDeleting ? <Spinner /> : <TrashIcon />}
-    </Button>
+    <>
+      <Button
+        variant="ghost"
+        className="h-full hover:bg-destructive/20 dark:hover:bg-destructive/20"
+        onClick={() => setIsConfirming(true)}
+      >
+        {isDeleting ? <Spinner /> : <TrashIcon />}
+      </Button>
+      <ConfirmationModal
+        onConfirm={() => {
+          const { conversation_id, bot_id } = conversation;
+          deleteConversation({
+            conversationId: conversation_id,
+            botId: bot_id,
+          });
+        }}
+        isLoading={isDeleting}
+        onOpenChange={setIsConfirming}
+        open={isConfirming}
+      >
+        ¿Seguro de borrar la conversación <b>{conversation.title}</b>?
+      </ConfirmationModal>
+    </>
   );
 };
