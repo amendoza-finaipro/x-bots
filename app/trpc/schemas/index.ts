@@ -7,6 +7,7 @@ export {
 } from "./bot";
 export {
   getAllConversationsSchema,
+  createConversationSchema,
   deleteConversationSchema,
   getConversationByIdSchema,
   sendMessageSchema,

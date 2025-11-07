@@ -18,7 +18,7 @@ export async function createContext({ request }: CreateContextOptions) {
 // Exporta el tipo para usarlo en initTRPC
 export type Context = Awaited<ReturnType<typeof createContext>>;
 
-export function getUrlWithAK({ url, ctx }: { url: URL; ctx: Context }) {
+export function getUrlWithUID({ url, ctx }: { url: URL; ctx: Context }) {
   url.searchParams.append("user_id", ctx.user.id);
   return url;
 }

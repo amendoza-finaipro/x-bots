@@ -32,8 +32,8 @@ import {
   EmptyDescription,
   EmptyContent,
 } from "../ui/empty";
-import { NEW_CONVERSATION } from "~/constants";
 import { Spinner } from "../ui/spinner";
+import { useFirstConversation } from "~/hooks";
 
 export const BotsList = () => {
   const [botDocumentsId, setBotDocumentsId] = useState<null | string>(null);
@@ -68,7 +68,7 @@ export const BotsList = () => {
 
   return (
     <>
-      <ul className="grid lg:grid-cols-2 gap-5 pt-15">
+      <ul className="grid lg:grid-cols-2 xl:grid-cols-3 gap-5 pt-15">
         {botsList.bots.map((bot) => (
           <li key={bot.id}>
             <BotCard bot={bot} setBotDocumentsId={setBotDocumentsId} />
@@ -93,14 +93,7 @@ const BotCard = ({
   bot: Bot;
   setBotDocumentsId: (value: string) => void;
 }) => {
-  const { data: allConversations, isLoading } =
-    trpc.conversation.getAllConversations.useQuery({ botId: bot.id });
-
-  const conversationId = useMemo(() => {
-    const firstConversation =
-      allConversations?.conversations?.[0]?.conversation_id;
-    return firstConversation ? `/${firstConversation}` : `/${NEW_CONVERSATION}`;
-  }, [allConversations]);
+  const { firstConversation, isLoading } = useFirstConversation({ botId: bot.id });
 
   return (
     <>
@@ -153,7 +146,7 @@ const BotCard = ({
             Documentos
           </Button>
           <Button asChild disabled={isLoading}>
-            <Link to={`bot/${bot.id}${conversationId}`}>
+            <Link to={`/bot/${bot.id}/${firstConversation}`}>
               {isLoading ? <Spinner /> : "Abrir bot"}
             </Link>
           </Button>
