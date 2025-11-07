@@ -2,7 +2,7 @@ export interface Conversation {
   conversation_id: string;
   bot_id: string;
   user_id: string;
-  title: string;
+  title: string | null;
   summary: string;
   language: string;
   created_at: string;
@@ -39,4 +39,8 @@ export interface SendMessageRes {
 export interface SendMessageResItem {
   role: string;
   content: string;
+}
+
+export interface MessageWithIndicator extends Message {
+  isNew: boolean;
 }

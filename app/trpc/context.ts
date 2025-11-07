@@ -5,12 +5,13 @@ type CreateContextOptions = {
 };
 
 export async function createContext({ request }: CreateContextOptions) {
-  // TODO: fetch user and apiKey from autentication
+  // TODO: fetch user, apiKey and token from autentication
   const user = userMockData;
 
   return {
     user,
     apiKey: "1234567890",
+    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIiwiZXhwIjoxNzk0MDY0OTYwfQ.IrtX8yEIUj4WQ_9buwYXa5i6d5ohjkOnMWx123N_HTM",
     request,
   };
 }
@@ -26,6 +27,7 @@ export function getUrlWithUID({ url, ctx }: { url: URL; ctx: Context }) {
 export function getHeaders(ctx: Context) {
   return { 
     "x-api-key": ctx.apiKey, 
+    "Authorization": `Bearer ${ctx.token}`,
     "Content-Type": "application/json" 
   };
 }

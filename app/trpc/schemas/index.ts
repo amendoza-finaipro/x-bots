@@ -1,5 +1,6 @@
 export {
   addBotDocumentSchema,
+  getBotDetailSchema,
   attachmentSchema,
   createBotSchema,
   getDocumentsByBotSchema,

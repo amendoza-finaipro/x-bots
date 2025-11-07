@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { NEW_CHAT_ID } from "~/constants";
 import { trpc } from "~/trpc/client";
+import type { Conversation } from "~/types";
 
 interface Params {
   botId: string;
@@ -16,5 +17,11 @@ export const useFirstConversation = ({ botId }: Params) => {
     return firstConversation ? firstConversation : NEW_CHAT_ID;
   }, [allConversations]);
 
-  return { firstConversation, isLoading, allConversations };
+  const getFirstConversation = (conversations: Conversation[]) => {
+    const firstConversation =
+      conversations[0]?.conversation_id;
+    return firstConversation ? firstConversation : NEW_CHAT_ID;
+  }
+
+  return { firstConversation, isLoading, allConversations, getFirstConversation };
 };

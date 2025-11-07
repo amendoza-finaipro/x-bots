@@ -2,7 +2,8 @@ import { initTRPC } from "@trpc/server";
 import { getHeaders, getUrlWithUID, type Context } from "../context";
 import { env } from "~/lib/env";
 import type { CreateBotResponse, Bot, BotDocument } from "~/types";
-import { addBotDocumentSchema, createBotSchema, deleteDocumentSchema, getDocumentsByBotSchema } from "../schemas";
+import { addBotDocumentSchema, createBotSchema, deleteDocumentSchema, getBotDetailSchema, getDocumentsByBotSchema } from "../schemas";
+import { updateBotSchema } from "../schemas/bot";
 
 const t = initTRPC.context<Context>().create();
 
@@ -30,6 +31,50 @@ export const botRouter = t.router({
     }
     return res.json();
   }),
+  getBotDetail: t.procedure
+    .input(getBotDetailSchema)
+    .query(async ({ input, ctx }): Promise<Bot> => {
+      const url = new URL(`${env.BACKEND_BASE_URL}/bots/${input.botId}`);
+      const res = await fetch(getUrlWithUID({ url, ctx }), {
+        headers: getHeaders(ctx),
+        method: "GET",
+      });
+      if (!res.ok) {
+        throw new Error("Error fetching bot");
+      }
+      return res.json();
+    }),
+  updateBot: t.procedure
+    .input(updateBotSchema)
+    .mutation(async ({ input, ctx }): Promise<Bot> => {
+      const url = new URL(`${env.BACKEND_BASE_URL}/bots/${input.botId}/config`);
+      const res = await fetch(url, {
+        headers: getHeaders(ctx),
+        method: "POST",
+        body: JSON.stringify({
+          user_id: ctx.user.id,
+          ...input
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Error updating bot");
+      }
+      return res.json();
+    }),
+  deleteBot: t.procedure
+    .input(getBotDetailSchema)
+    .mutation(async ({ input, ctx }): Promise<Bot> => {
+      const url = new URL(`${env.BACKEND_BASE_URL}/bots/${input.botId}`);
+      const res = await fetch(getUrlWithUID({url, ctx}), {
+        headers: getHeaders(ctx),
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        console.log(await res.json());
+        throw new Error("Error deleting bot");
+      }
+      return res.json();
+    }),
   getBotDocuments: t.procedure
     .input(getDocumentsByBotSchema)
     .query(async ({ input, ctx }): Promise<{ documents: BotDocument[] }> => {
