@@ -101,7 +101,7 @@ export const ChatsList = () => {
             </span>
           </Button>
           <Button variant="ghost" asChild>
-            <Link to="/">
+            <Link to="/dashboard">
               <BotIcon />
               <span className="group-data-[collapsible=icon]:hidden">
                 Volver a bots

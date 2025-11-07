@@ -14,7 +14,7 @@ import { Menu } from "lucide-react";
 import { userMockData } from "~/constants/data";
 
 const linkList = [
-  { to: "/", label: "Mis bots" },
+  { to: "/dashboard", label: "Mis bots" },
   { to: "/create-bot", label: "Fábrica de bots" },
 ];
 
