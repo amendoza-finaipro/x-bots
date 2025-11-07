@@ -16,6 +16,10 @@ export const createBotSchema = z.object({
   response_length: z.enum(["short", "medium", "long"]),
 });
 
+export const getBotDetailSchema = z.object({
+  botId: z.string(),
+});
+
 export const getDocumentsByBotSchema = z.object({
   botId: z.string(),
 });

@@ -19,13 +19,13 @@ import { MDComponents } from "~/mdx-components";
 import { NEW_CHAT_ID } from "~/constants";
 
 export const MyChat = () => {
-  const { messages, isBotPending, addMessage, chatId } = useChat();
+  const { messages, isBotPending, addMessage, chatId, botInfo } = useChat();
 
   return (
     <div className="w-full h-screen flex flex-col">
       <header className="h-14 flex items-center gap-4 px-4 bg-sidebar">
         <SidebarTrigger className="lg:hidden" />
-        <h1 className="text-lg font-bold">x-bots</h1>
+        <h1 className="text-lg font-bold">{botInfo?.name}</h1>
       </header>
       <Conversation className="relative size-full grow">
         <ConversationContent>

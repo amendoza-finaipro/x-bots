@@ -20,6 +20,7 @@ export const useChat = () => {
     page: 1,
   };
 
+  const { data: botInfo } = trpc.bot.getBotDetail.useQuery({botId: botId!});
   const { data: conversation } = trpc.conversation.getConversationById.useQuery(
     conversationData,
     {
@@ -113,5 +114,5 @@ export const useChat = () => {
     }
   };
 
-  return { messages, isBotPending, addMessage, chatId };
+  return { messages, isBotPending, addMessage, chatId, botInfo };
 };
