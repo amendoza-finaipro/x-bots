@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 import type { Conversation } from "~/types";
 import { useFirstConversation } from "~/hooks";
+import { NEW_CONVERSATION_NAME } from "~/constants";
 
 export const ChatsList = () => {
   const [documentsOpen, setDocumentsOpen] = useState(false);
@@ -58,7 +59,7 @@ export const ChatsList = () => {
                           className="flex items-center h-15 grow p-2"
                         >
                           <div className="flex flex-col">
-                            <span>{conversation.title}</span>
+                            <span>{conversation.title || NEW_CONVERSATION_NAME}</span>
                             <span className="text-xs text-muted-foreground">
                               {format(
                                 conversation.created_at,

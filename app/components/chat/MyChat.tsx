@@ -17,7 +17,6 @@ import { useChat } from "./useChat";
 import Markdown from "react-markdown";
 import { MDComponents } from "~/mdx-components";
 import { NEW_CHAT_ID } from "~/constants";
-import { PlusCircle, SparkleIcon, SparklesIcon } from "lucide-react";
 
 export const MyChat = () => {
   const { messages, isBotPending, addMessage, chatId } = useChat();
