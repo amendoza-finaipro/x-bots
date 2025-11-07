@@ -63,7 +63,7 @@ export const MDComponents = {
     />
   ),
   ol: (props: OlListProps) => (
-    <ul
+    <ol
       {...props}
       className="list-decimal pl-6"
     />
