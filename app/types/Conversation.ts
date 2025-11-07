@@ -40,3 +40,7 @@ export interface SendMessageResItem {
   role: string;
   content: string;
 }
+
+export interface MessageWithIndicator extends Message {
+  isNew: boolean;
+}

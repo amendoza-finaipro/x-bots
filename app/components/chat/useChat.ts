@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { NEW_CHAT_ID } from "~/constants";
 import { trpc } from "~/trpc/client";
-import type { Message, MessageNoKey } from "~/types";
+import type { Message, MessageNoKey, MessageWithIndicator } from "~/types";
 
 export const useChat = () => {
   const { botId, chatId: chatIdParams } = useParams<{
@@ -11,7 +11,7 @@ export const useChat = () => {
   }>();
   const navigate = useNavigate();
   const [chatId, setChatId] = useState(chatIdParams);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageWithIndicator[]>([]);
 
   const conversationData = {
     botId: botId!,
@@ -20,7 +20,7 @@ export const useChat = () => {
     page: 1,
   };
 
-  const { data: botInfo } = trpc.bot.getBotDetail.useQuery({botId: botId!});
+  const { data: botInfo } = trpc.bot.getBotDetail.useQuery({ botId: botId! });
   const { data: conversation } = trpc.conversation.getConversationById.useQuery(
     conversationData,
     {
@@ -30,7 +30,7 @@ export const useChat = () => {
 
   useEffect(() => {
     if (!conversation || conversation.messages.length === 0) return;
-    setMessages(conversation.messages);
+    setMessages(conversation.messages.map((m) => ({ ...m, isNew: false })));
   }, [conversation]);
 
   useEffect(() => {
@@ -52,6 +52,7 @@ export const useChat = () => {
             content: message.message,
             created_at: String(new Date()),
             role: "user",
+            isNew: true,
           },
         ]);
       },
@@ -65,6 +66,7 @@ export const useChat = () => {
             content: newMessage,
             created_at: String(new Date()),
             role: "assistant",
+            isNew: true,
           },
         ]);
         checkNewConversationName();
@@ -78,10 +80,7 @@ export const useChat = () => {
           { botId: botId! },
           (old) =>
             old && {
-              conversations: [
-                { ...data, title: null },
-                ...old?.conversations,
-              ],
+              conversations: [{ ...data, title: null }, ...old?.conversations],
             }
         );
       },

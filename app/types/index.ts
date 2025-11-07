@@ -12,4 +12,5 @@ export type {
   Memory,
   Message,
   SendMessageRes,
+  MessageWithIndicator,
 } from "./Conversation";
