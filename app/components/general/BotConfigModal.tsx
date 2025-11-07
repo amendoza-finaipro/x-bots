@@ -131,7 +131,9 @@ export const BotConfigModal = ({ open, onOpenChange, botInfo }: Props) => {
           <Button onClick={() => updateBot(botData)} disabled={isPending}>
             {isPending ? <Spinner /> : "Guardar"}
           </Button>
-          <Button variant="secondary">Cancelar</Button>
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

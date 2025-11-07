@@ -20,7 +20,7 @@ import { NEW_CHAT_ID } from "~/constants";
 import { useWriteText } from "~/hooks";
 import { Button } from "../ui/button";
 import { Settings } from "lucide-react";
-import { BotConfigModal } from "./BotConfigModal";
+import { BotConfigModal } from "../general/BotConfigModal";
 
 export const MyChat = () => {
   const {
