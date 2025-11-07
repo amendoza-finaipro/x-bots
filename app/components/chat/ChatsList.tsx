@@ -58,8 +58,8 @@ export const ChatsList = () => {
               <SidebarMenu>
                 {conversations?.conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.conversation_id}>
-                    <SidebarMenuButton
-                      className={cn("flex h-15 gap-0 p-0", {
+                    <div
+                      className={cn("flex h-15 gap-0 p-0 hover:bg-accent rounded", {
                         "bg-input": conversation.conversation_id === chatId,
                       })}
                     >
@@ -82,7 +82,7 @@ export const ChatsList = () => {
                         </Link>
                         <DeleteConversationButton conversation={conversation} />
                       </div>
-                    </SidebarMenuButton>
+                    </div>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
