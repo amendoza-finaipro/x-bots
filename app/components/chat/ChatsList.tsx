@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-import { PlusIcon, TrashIcon } from "lucide-react";
+import { BotIcon, FileIcon, PlusIcon, Settings, TrashIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -25,10 +25,11 @@ import { Spinner } from "../ui/spinner";
 import type { Conversation } from "~/types";
 import { useFirstConversation } from "~/hooks";
 import { NEW_CONVERSATION_NAME } from "~/constants";
+import { cn } from "~/lib/utils";
 
 export const ChatsList = () => {
   const [documentsOpen, setDocumentsOpen] = useState(false);
-  const { botId } = useParams<{ botId: string }>();
+  const { botId, chatId } = useParams<{ botId: string; chatId: string }>();
   const { data: conversations } =
     trpc.conversation.getAllConversations.useQuery({ botId: botId! });
 
@@ -41,25 +42,36 @@ export const ChatsList = () => {
           <SidebarTrigger />
         </SidebarHeader>
         <SidebarContent>
-          <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+          <SidebarGroup>
             <Button variant="secondary" asChild>
               <Link to={`/bot/${botId}/new`}>
-                <PlusIcon /> Nuevo chat
+                <PlusIcon className="pointer-events-none" />
+                <span className="group-data-[collapsible=icon]:hidden pointer-events-none">
+                  Nuevo chat
+                </span>
               </Link>
             </Button>
-            <SidebarGroupLabel>Conversaciones</SidebarGroupLabel>
-            <SidebarGroupContent>
+            <SidebarGroupLabel className="pointer-events-none">
+              Conversaciones
+            </SidebarGroupLabel>
+            <SidebarGroupContent className="group-data-[collapsible=icon]:hidden">
               <SidebarMenu>
                 {conversations?.conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.title}>
-                    <SidebarMenuButton className="flex h-15 gap-0 p-0">
+                    <SidebarMenuButton
+                      className={cn("flex h-15 gap-0 p-0", {
+                        "bg-input": conversation.conversation_id === chatId,
+                      })}
+                    >
                       <div className="contents">
                         <Link
                           to={`/bot/${botId}/${conversation.conversation_id}`}
                           className="flex items-center h-15 grow p-2"
                         >
                           <div className="flex flex-col">
-                            <span>{conversation.title || NEW_CONVERSATION_NAME}</span>
+                            <span>
+                              {conversation.title || NEW_CONVERSATION_NAME}
+                            </span>
                             <span className="text-xs text-muted-foreground">
                               {format(
                                 conversation.created_at,
@@ -78,16 +90,21 @@ export const ChatsList = () => {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          <Button
-            onClick={() => setDocumentsOpen(true)}
-            className="group-data-[collapsible=icon]:hidden"
-          >
-            Gestionar documentos
+          <Button onClick={() => setDocumentsOpen(true)}>
+            <FileIcon />
+            <span className="group-data-[collapsible=icon]:hidden">
+              Gestionar documentos
+            </span>
           </Button>
           <Button variant="ghost" asChild>
-            <Link to="/">Volver a bots</Link>
+            <Link to="/">
+              <BotIcon />
+              <span className="group-data-[collapsible=icon]:hidden">
+                Volver a bots
+              </span>
+            </Link>
           </Button>
-          <ThemeButton className="group-data-[collapsible=icon]:hidden" />
+          <ThemeButton />
         </SidebarFooter>
       </Sidebar>
       <DocumentsModal
