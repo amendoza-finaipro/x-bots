@@ -128,13 +128,24 @@ const DeleteConversationButton = ({
   const utils = trpc.useUtils();
   const navigate = useNavigate();
   const { chatId, botId } = useParams<{ chatId: string; botId: string }>();
-  const { firstConversation } = useFirstConversation({ botId: botId! });
+  const { getFirstConversation } = useFirstConversation({ botId: botId! });
   const [isConfirming, setIsConfirming] = useState(false);
   const { mutate: deleteConversation, isPending: isDeleting } =
     trpc.conversation.deleteConversation.useMutation({
       onSuccess: async () => {
-        await utils.conversation.getAllConversations.refetch();
+        let conversations: Conversation[] = [];
+        utils.conversation.getAllConversations.setData(
+          { botId: botId! },
+          (old) => {
+            if (!old) return;
+            conversations = old.conversations.filter(
+              (c) => c.conversation_id !== conversation.conversation_id
+            );
+            return { conversations };
+          }
+        );
         if (conversation.conversation_id === chatId) {
+          const firstConversation = getFirstConversation(conversations);
           navigate(`/bot/${botId}/${firstConversation}`);
         }
         toast.success("Conversation deleted successfully");
