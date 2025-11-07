@@ -6,7 +6,7 @@ type CreateContextOptions = {
 
 export async function createContext({ request }: CreateContextOptions) {
   // TODO: fetch user and apiKey from autentication
-  const user = userMockData;
+  const user = userMockData; // TODO: Add user info from auth
 
   return {
     user,
