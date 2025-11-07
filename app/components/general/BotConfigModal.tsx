@@ -122,7 +122,7 @@ export const BotConfigModal = ({ open, onOpenChange, botInfo }: Props) => {
               <Textarea
                 value={botData.instructions}
                 onChange={(e) => changeData("instructions", e.target.value)}
-                className="max-h-40 resize-none"
+                className="max-h-42 resize-none"
               />
             </li>
           </ul>
