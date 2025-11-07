@@ -8,6 +8,10 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Spinner } from "../ui/spinner";
 import { format } from "date-fns";
 import { BotOptions } from "./BotOptions";
+import { trpc } from "~/trpc/client";
+import { ConfirmationModal } from "../general";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const BotCard = ({
   bot,
@@ -18,8 +22,19 @@ export const BotCard = ({
   setBotDocumentsId: (value: string) => void;
   setBotToUpdate: (value: Bot) => void;
 }) => {
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+
+  const utils = trpc.useUtils();
+
   const { firstConversation, isLoading } = useFirstConversation({
     botId: bot.id,
+  });
+  const { mutate: deleteBot, isPending: isDeleting } = trpc.bot.deleteBot.useMutation({
+    onSuccess: () => {
+      toast.success("Bot eliminado exitosamente");
+      utils.bot.getAllBots.invalidate();
+      setOpenDelete(false);
+    }
   });
 
   return (
@@ -28,7 +43,7 @@ export const BotCard = ({
         <CardHeader className="h-full">
           <div className="flex justify-between">
             <img src={chatbotImage} className="size-7" />
-            <BotOptions onUpdate={() => setBotToUpdate(bot)} />
+            <BotOptions onUpdate={() => setBotToUpdate(bot)} onDelete={() => setOpenDelete(true)} />
           </div>
           <CardTitle>{bot.name}</CardTitle>
           <CardDescription>{bot.description}</CardDescription>
@@ -82,6 +97,13 @@ export const BotCard = ({
           </Button>
         </CardFooter>
       </Card>
+      <ConfirmationModal 
+        message={`Seguro de eliminar el bot ${bot.name}?`}
+        onConfirm={() => deleteBot({botId: bot.id})}
+        onOpenChange={setOpenDelete}
+        open={openDelete}
+        isLoading={isDeleting}
+      />
     </>
   );
 };

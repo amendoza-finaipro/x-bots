@@ -7,7 +7,13 @@ import {
 import { EllipsisVerticalIcon } from "lucide-react";
 import { Button } from "../ui/button";
 
-export const BotOptions = ({ onUpdate }: { onUpdate: () => void }) => {
+export const BotOptions = ({
+  onUpdate,
+  onDelete,
+}: {
+  onUpdate: () => void;
+  onDelete: () => void;
+}) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -17,7 +23,7 @@ export const BotOptions = ({ onUpdate }: { onUpdate: () => void }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem onClick={onUpdate}>Actualizar bot</DropdownMenuItem>
-        <DropdownMenuItem className="text-destructive">
+        <DropdownMenuItem className="text-destructive" onClick={onDelete}>
           Eliminar bot
         </DropdownMenuItem>
       </DropdownMenuContent>

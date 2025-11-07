@@ -57,8 +57,21 @@ export const botRouter = t.router({
         }),
       });
       if (!res.ok) {
-        console.log(await res.json());
         throw new Error("Error updating bot");
+      }
+      return res.json();
+    }),
+  deleteBot: t.procedure
+    .input(getBotDetailSchema)
+    .mutation(async ({ input, ctx }): Promise<Bot> => {
+      const url = new URL(`${env.BACKEND_BASE_URL}/bots/${input.botId}`);
+      const res = await fetch(getUrlWithUID({url, ctx}), {
+        headers: getHeaders(ctx),
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        console.log(await res.json());
+        throw new Error("Error deleting bot");
       }
       return res.json();
     }),
