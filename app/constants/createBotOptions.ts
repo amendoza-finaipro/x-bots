@@ -1,16 +1,16 @@
 export const complexityOptions = [
   {
-    title: "Corta",
+    title: "Simple",
     description: "De una a tres oraciones.",
     value: "simple",
   },
   {
-    title: "Media",
+    title: "Intermedia",
     description: "Dos párrafos breves ideales para resúmenes.",
     value: "intermediate",
   },
   {
-    title: "Larga",
+    title: "Avanzada",
     description: "Respuestas detalladas con pasos y matices.",
     value: "advanced",
   },

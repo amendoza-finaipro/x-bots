@@ -2,9 +2,16 @@ import { chatbotImage } from "@/components/assets/images";
 import { ClockIcon, BotIcon, BrainIcon, RulerIcon } from "lucide-react";
 import { Link } from "react-router";
 import { useFirstConversation } from "~/hooks";
-import type { Bot } from "~/types";
+import type { Bot, CreateBotOption } from "~/types";
 import { Button } from "../ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "../ui/card";
 import { Spinner } from "../ui/spinner";
 import { format } from "date-fns";
 import { BotOptions } from "./BotOptions";
@@ -12,6 +19,11 @@ import { trpc } from "~/trpc/client";
 import { ConfirmationModal } from "../general";
 import { useState } from "react";
 import { toast } from "sonner";
+import {
+  complexityOptions,
+  friendlinessOptions,
+  responseLengthOptions,
+} from "~/constants";
 
 export const BotCard = ({
   bot,
@@ -29,13 +41,18 @@ export const BotCard = ({
   const { firstConversation, isLoading } = useFirstConversation({
     botId: bot.id,
   });
-  const { mutate: deleteBot, isPending: isDeleting } = trpc.bot.deleteBot.useMutation({
-    onSuccess: () => {
-      toast.success("Bot eliminado exitosamente");
-      utils.bot.getAllBots.invalidate();
-      setOpenDelete(false);
-    }
-  });
+  const { mutate: deleteBot, isPending: isDeleting } =
+    trpc.bot.deleteBot.useMutation({
+      onSuccess: () => {
+        toast.success("Bot eliminado exitosamente");
+        utils.bot.getAllBots.invalidate();
+        setOpenDelete(false);
+      },
+    });
+
+  const getOptionTitleByValue = (options: CreateBotOption[], value: string) => {
+    return options.find((op) => op.value === value)?.title;
+  };
 
   return (
     <>
@@ -43,7 +60,10 @@ export const BotCard = ({
         <CardHeader className="h-full">
           <div className="flex justify-between">
             <img src={chatbotImage} className="size-7" />
-            <BotOptions onUpdate={() => setBotToUpdate(bot)} onDelete={() => setOpenDelete(true)} />
+            <BotOptions
+              onUpdate={() => setBotToUpdate(bot)}
+              onDelete={() => setOpenDelete(true)}
+            />
           </div>
           <CardTitle>{bot.name}</CardTitle>
           <CardDescription>{bot.description}</CardDescription>
@@ -70,19 +90,34 @@ export const BotCard = ({
             <div className="flex gap-2">
               <BotIcon className="text-blue-400 size-5" />
               <span className="font-semibold text-sm">Complejidad</span>
-              <span className="text-sm pl-2">{bot.config.complexity}</span>
+              <span className="text-sm pl-2">
+                {getOptionTitleByValue(
+                  complexityOptions,
+                  bot.config.complexity
+                )}
+              </span>
             </div>
             <div className="flex gap-2">
               <BrainIcon className="text-blue-400 size-5" />
               <span className="font-semibold text-sm">Tono</span>
-              <span className="text-sm pl-2">{bot.config.friendliness}</span>
+              <span className="text-sm pl-2">
+                {getOptionTitleByValue(
+                  friendlinessOptions,
+                  bot.config.friendliness
+                )}
+              </span>
             </div>
             <div className="flex gap-2">
               <RulerIcon className="text-blue-400 size-5" />
               <span className="font-semibold text-sm">
                 Longitud de respuesta
               </span>
-              <span className="text-sm pl-2">{bot.config.response_length}</span>
+              <span className="text-sm pl-2">
+                {getOptionTitleByValue(
+                  responseLengthOptions,
+                  bot.config.response_length
+                )}
+              </span>
             </div>
           </div>
         </CardContent>
@@ -97,9 +132,9 @@ export const BotCard = ({
           </Button>
         </CardFooter>
       </Card>
-      <ConfirmationModal 
+      <ConfirmationModal
         message={`Seguro de eliminar el bot ${bot.name}?`}
-        onConfirm={() => deleteBot({botId: bot.id})}
+        onConfirm={() => deleteBot({ botId: bot.id })}
         onOpenChange={setOpenDelete}
         open={openDelete}
         isLoading={isDeleting}
