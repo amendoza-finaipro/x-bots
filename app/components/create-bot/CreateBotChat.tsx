@@ -37,7 +37,7 @@ export const CreateBotChat = () => {
   const { mutate: createBot, isPending: isCreateLoading } =
     trpc.bot.createBot.useMutation({
       onSuccess: (data) => {
-        navigate("/");
+        navigate("/dashboard");
         toast.success(`${data.blueprint.name} creado exitosamente`);
       },
     });
