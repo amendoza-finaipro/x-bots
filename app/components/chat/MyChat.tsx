@@ -18,28 +18,50 @@ import Markdown from "react-markdown";
 import { MDComponents } from "~/mdx-components";
 import { NEW_CHAT_ID } from "~/constants";
 import { useWriteText } from "~/hooks";
+import { Button } from "../ui/button";
+import { Settings } from "lucide-react";
+import { BotConfigModal } from "./BotConfigModal";
 
 export const MyChat = () => {
-  const { messages, isBotPending, addMessage, chatId, botInfo } = useChat();
+  const {
+    messages,
+    isBotPending,
+    addMessage,
+    chatId,
+    botInfo,
+    botConfigOpen,
+    setBotConfigOpen,
+  } = useChat();
 
   return (
-    <div className="w-full h-screen flex flex-col">
-      <header className="h-14 flex items-center gap-4 px-4 bg-sidebar">
-        <SidebarTrigger className="lg:hidden" />
-        <h1 className="text-lg font-bold">{botInfo?.name}</h1>
-      </header>
-      <Conversation className="relative size-full grow">
-        <ConversationContent>
-          {chatId === NEW_CHAT_ID && <NewConversationCard />}
-          {messages?.map((message) => (
-            <ChatMessage {...message} key={message.id} />
-          ))}
-          {isBotPending && <TypingIndicator />}
-        </ConversationContent>
-        <ConversationScrollButton />
-      </Conversation>
-      <MyPromptInput addMessage={addMessage} />
-    </div>
+    <>
+      <div className="w-full h-screen flex flex-col">
+        <header className="h-14 flex items-center gap-4 px-4 bg-sidebar">
+          <SidebarTrigger className="lg:hidden" />
+          <h1 className="text-lg font-bold">{botInfo?.name}</h1>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setBotConfigOpen(true)}
+          >
+            <Settings />
+            Configuración
+          </Button>
+        </header>
+        <Conversation className="relative size-full grow">
+          <ConversationContent>
+            {chatId === NEW_CHAT_ID && <NewConversationCard />}
+            {messages?.map((message) => (
+              <ChatMessage {...message} key={message.id} />
+            ))}
+            {isBotPending && <TypingIndicator />}
+          </ConversationContent>
+          <ConversationScrollButton />
+        </Conversation>
+        <MyPromptInput addMessage={addMessage} />
+      </div>
+      <BotConfigModal open={botConfigOpen} botInfo={botInfo} onOpenChange={setBotConfigOpen} />
+    </>
   );
 };
 

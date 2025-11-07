@@ -3,6 +3,7 @@ import { getHeaders, getUrlWithUID, type Context } from "../context";
 import { env } from "~/lib/env";
 import type { CreateBotResponse, Bot, BotDocument } from "~/types";
 import { addBotDocumentSchema, createBotSchema, deleteDocumentSchema, getBotDetailSchema, getDocumentsByBotSchema } from "../schemas";
+import { updateBotSchema } from "../schemas/bot";
 
 const t = initTRPC.context<Context>().create();
 
@@ -40,6 +41,24 @@ export const botRouter = t.router({
       });
       if (!res.ok) {
         throw new Error("Error fetching bot");
+      }
+      return res.json();
+    }),
+  updateBot: t.procedure
+    .input(updateBotSchema)
+    .mutation(async ({ input, ctx }): Promise<Bot> => {
+      const url = new URL(`${env.BACKEND_BASE_URL}/bots/${input.botId}/config`);
+      const res = await fetch(url, {
+        headers: getHeaders(ctx),
+        method: "POST",
+        body: JSON.stringify({
+          user_id: ctx.user.id,
+          ...input
+        }),
+      });
+      if (!res.ok) {
+        console.log(await res.json());
+        throw new Error("Error updating bot");
       }
       return res.json();
     }),

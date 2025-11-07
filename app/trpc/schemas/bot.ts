@@ -16,6 +16,17 @@ export const createBotSchema = z.object({
   response_length: z.enum(["short", "medium", "long"]),
 });
 
+export const updateBotSchema = z.object({
+  botId: z.string(),
+  complexity: z.enum(["simple", "intermediate", "advanced"]),
+  friendliness: z.enum(["neutral", "friendly", "formal"]),
+  instructions: z.string(),
+  max_tokens: z.int(),
+  model_id: z.string(),
+  response_length: z.enum(["short", "medium", "long"]),
+  temperature: z.number().min(0).max(1),
+});
+
 export const getBotDetailSchema = z.object({
   botId: z.string(),
 });

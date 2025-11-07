@@ -12,6 +12,7 @@ export const useChat = () => {
   const navigate = useNavigate();
   const [chatId, setChatId] = useState(chatIdParams);
   const [messages, setMessages] = useState<MessageWithIndicator[]>([]);
+  const [botConfigOpen, setBotConfigOpen] = useState(false);
 
   const conversationData = {
     botId: botId!,
@@ -113,5 +114,13 @@ export const useChat = () => {
     }
   };
 
-  return { messages, isBotPending, addMessage, chatId, botInfo };
+  return {
+    messages,
+    isBotPending,
+    addMessage,
+    chatId,
+    botInfo,
+    botConfigOpen,
+    setBotConfigOpen,
+  };
 };
