@@ -4,7 +4,7 @@ import { Pool } from "pg";
 import { env } from "./env";
 
 import { emailOTP } from "better-auth/plugins";
-import { sendOptEmail } from "~/actions/email";
+import { sendOtpEmail } from "~/actions/email";
 
 export const auth = betterAuth({
   database: new Pool({
@@ -37,7 +37,7 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
-        sendOptEmail({name: email, otp, email});
+        sendOtpEmail({name: email, otp, email});
         console.log(`Sending ${type} OTP to ${email}: ${otp}`);
       }
     })

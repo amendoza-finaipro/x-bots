@@ -34,7 +34,7 @@ interface VerificationEmailParams extends BaseEmailParams {
   otp: string;
 }
 
-export const sendOptEmail = async ({
+export const sendOtpEmail = async ({
   name,
   otp,
   email,
@@ -42,7 +42,7 @@ export const sendOptEmail = async ({
   const message: EmailMessage = {
     senderAddress: SENDER_ADDRESS,
     content: {
-      subject: "X Bots - OPT de autenticación",
+      subject: "X Bots - Login OTP",
       html: await render(
         <OtpEmail
           name={name}
