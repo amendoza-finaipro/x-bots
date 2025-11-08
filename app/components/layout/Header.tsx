@@ -1,10 +1,7 @@
 import { Logo } from "@/components/assets/icons";
 import { Menu } from "lucide-react";
 import { Link, NavLink, useNavigate } from "react-router";
-import { userMockData } from "~/constants/data";
-import { auth } from "~/lib/auth";
 import { cn } from "~/lib/utils";
-import type { Route } from "../../routes/+types/_index";
 import { ThemeButton } from "../general/ThemeButton";
 import { Button } from "../ui/button";
 import {
@@ -14,7 +11,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { toast } from "sonner";
 
 const linkList = [
   { to: "/dashboard", label: "Mis bots" },
@@ -22,12 +18,6 @@ const linkList = [
 ];
 
 export const Header = ({ email }: { email: string }) => {
-
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    navigate("/otp");
-  };
 
   return (
     <header className="p-5 flex items-center justify-between container mx-auto">
@@ -56,7 +46,7 @@ export const Header = ({ email }: { email: string }) => {
         <ThemeButton variant="ghost" />
         <span className="text-xs text-muted-foreground">{email}</span>
         <Button variant="secondary" asChild>
-          <Link to="/otp">Cerrar sesión</Link>
+          <Link to="/logout">Cerrar sesión</Link>
         </Button>
       </div>
 
@@ -102,7 +92,7 @@ export const Header = ({ email }: { email: string }) => {
                 </span>
               </div>
               <Button variant="secondary" asChild>
-                <Link to="/otp">Cerrar sesión</Link>
+                <Link to="/logout">Cerrar sesión</Link>
               </Button>
             </div>
           </SheetContent>

@@ -1,6 +1,5 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
-import { jsonArraySchema } from "./jsonArraySchema";
 
 export const env = createEnv({
   server: {
@@ -16,6 +15,9 @@ export const env = createEnv({
 
     AZURE_COMMUNICATION_EMAIL_ENDPOINT: z.string(),
     AZURE_COMMUNICATION_EMAIL_ACCESS_KEY: z.string(),
+
+    API_KEY: z.string(),
+    JWT_SECRET: z.string(),
   },
 
   client: {
@@ -37,6 +39,9 @@ export const env = createEnv({
 
     AZURE_COMMUNICATION_EMAIL_ENDPOINT: process.env.AZURE_COMMUNICATION_EMAIL_ENDPOINT,
     AZURE_COMMUNICATION_EMAIL_ACCESS_KEY: process.env.AZURE_COMMUNICATION_EMAIL_ACCESS_KEY,
+
+    API_KEY: process.env.API_KEY,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
   emptyStringAsUndefined: true,
 });

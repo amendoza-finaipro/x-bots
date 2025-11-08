@@ -70,7 +70,6 @@ export const botRouter = t.router({
         method: "DELETE",
       });
       if (!res.ok) {
-        console.log(await res.json());
         throw new Error("Error deleting bot");
       }
       return res.json();

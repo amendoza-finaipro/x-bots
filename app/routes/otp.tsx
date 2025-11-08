@@ -1,11 +1,11 @@
+import { Logo } from '@/components/assets/icons';
 import { Form, redirect } from 'react-router';
 import { Button } from '~/components/ui/button';
+import { Card } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';
+import { Label } from '~/components/ui/label';
 import { auth } from '~/lib/auth';
 import type { Route } from './+types/otp';
-import { Card } from '~/components/ui/card';
-import { Logo } from '@/components/assets/icons';
-import { Label } from '~/components/ui/label';
 
 
 export const action = async ({ request }: Route.ActionArgs) => {
@@ -37,7 +37,9 @@ export const action = async ({ request }: Route.ActionArgs) => {
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
     const session = await auth.api.getSession({ headers: request.headers });
-    if (session) return redirect('/dashboard');
+    if (session) {
+        return redirect('/dashboard')
+    };
     return session;
 };
 

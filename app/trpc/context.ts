@@ -1,5 +1,6 @@
 import { userMockData } from "~/constants/data";
 import { auth } from "~/lib/auth";
+import { env } from "~/lib/env";
 import { signJWT } from "~/lib/sign-jwt";
 
 type CreateContextOptions = {
@@ -8,15 +9,17 @@ type CreateContextOptions = {
 
 export async function createContext({ request }: CreateContextOptions) {
   // TODO: fetch user and apiKey from autentication
-  const session = await auth.api.getSession({headers: request.headers}); 
-  const user = session ? session.user : userMockData;
+  const session = await auth.api.getSession({ headers: request.headers });
 
-  const jwt = signJWT({ user_id: "11111111-1111-1111-1111-111111111111" }, "07ad1a20a6140f1ebaf3f8a6f9716941");
+  const userData = session ? session.user :userMockData;
+  const user = { id: userData.id, email: userData.email, name: userData.name }
 
+  const jwt = signJWT({ user_id: user.id }, env.JWT_SECRET);
+  
   return {
     user,
-    apiKey: "1234567890",
-    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDAwMDAwMDAtMDAwMC0wMDAwLTAwMDAtMDAwMDAwMDAwMDAwIiwiZXhwIjoxNzk0MDY0OTYwfQ.IrtX8yEIUj4WQ_9buwYXa5i6d5ohjkOnMWx123N_HTM",
+    apiKey: env.API_KEY,
+    token: jwt,
     request,
   };
 }
@@ -30,9 +33,9 @@ export function getUrlWithUID({ url, ctx }: { url: URL; ctx: Context }) {
 }
 
 export function getHeaders(ctx: Context) {
-  return { 
-    "x-api-key": ctx.apiKey, 
+  return {
+    "x-api-key": ctx.apiKey,
     "Authorization": `Bearer ${ctx.token}`,
-    "Content-Type": "application/json" 
+    "Content-Type": "application/json"
   };
 }
