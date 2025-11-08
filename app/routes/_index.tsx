@@ -44,7 +44,7 @@ export default function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="hidden sm:inline-flex"
+                  className="sm:inline-flex"
                 >
                   <Link to="/otp">Login</Link>
                 </Button>
