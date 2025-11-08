@@ -18,7 +18,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export function loader() {
-  return { docsUrl: `${env.BACKEND_BASE_URL}/scalar` };
+  const url = env.BACKEND_BASE_URL.replace("/api/v1", "");
+  return { docsUrl: `${url}/scalar` };
 }
 
 export default function Home() {
