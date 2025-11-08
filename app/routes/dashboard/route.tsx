@@ -1,5 +1,4 @@
 import { Header } from "~/components/layout/Header";
-import { userMockData } from "~/constants/data";
 import { Button } from "~/components/ui/button";
 import { BotsList } from "~/components/home";
 import { Link, redirect, useLoaderData } from "react-router";
@@ -15,14 +14,13 @@ export function meta({ }: Route.MetaArgs) {
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const session = await auth.api.getSession({ headers: request.headers });
   if (!session) {
-    return redirect('/')
+    return redirect('/otp')
   };
   return session;
 };
 
 export default function Home() {
   const session = useLoaderData<typeof loader>();
-  // const session = { user: userMockData };
 
   return (
     <>

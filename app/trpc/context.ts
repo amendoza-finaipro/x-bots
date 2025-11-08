@@ -1,4 +1,5 @@
-import { userMockData } from "~/constants/data";
+import { redirect } from "react-router";
+import { tr } from "zod/v4/locales";
 import { auth } from "~/lib/auth";
 import { env } from "~/lib/env";
 import { signJWT } from "~/lib/sign-jwt";
@@ -8,14 +9,16 @@ type CreateContextOptions = {
 };
 
 export async function createContext({ request }: CreateContextOptions) {
-  // TODO: fetch user and apiKey from autentication
   const session = await auth.api.getSession({ headers: request.headers });
-
-  const userData = session ? session.user :userMockData;
+  if (!session || !session.user) { 
+    redirect("/"); 
+    throw new Error("Unauthenticated");
+  }
+  const userData = session.user;
   const user = { id: userData.id, email: userData.email, name: userData.name }
 
   const jwt = signJWT({ user_id: user.id }, env.JWT_SECRET);
-  
+
   return {
     user,
     apiKey: env.API_KEY,
