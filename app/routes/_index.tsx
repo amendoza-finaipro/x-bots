@@ -45,7 +45,7 @@ export default function Home() {
                   variant="outline"
                   className="hidden sm:inline-flex"
                 >
-                  <Link to="/login">Registro</Link>
+                  <Link to="/otp">Login</Link>
                 </Button>
               </div>
             </div>

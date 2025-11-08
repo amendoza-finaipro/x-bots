@@ -1,4 +1,6 @@
 import { userMockData } from "~/constants/data";
+import { auth } from "~/lib/auth";
+import { signJWT } from "~/lib/sign-jwt";
 
 type CreateContextOptions = {
   request: Request;
@@ -6,7 +8,10 @@ type CreateContextOptions = {
 
 export async function createContext({ request }: CreateContextOptions) {
   // TODO: fetch user and apiKey from autentication
-  const user = userMockData; // TODO: Add user info from auth
+  const session = await auth.api.getSession({headers: request.headers}); 
+  const user = session ? session.user : userMockData;
+
+  const jwt = signJWT({ user_id: "11111111-1111-1111-1111-111111111111" }, "07ad1a20a6140f1ebaf3f8a6f9716941");
 
   return {
     user,

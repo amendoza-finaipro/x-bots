@@ -32,7 +32,13 @@ export const action = async ({ request }: Route.ActionArgs) => {
         }
     });
 
-    return redirect('/', { headers: result.headers });
+    return redirect('/dashboard', { headers: result.headers });
+};
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (session) return redirect('/dashboard');
+    return session;
 };
 
 const Index = ({ actionData }: Route.ComponentProps) => {

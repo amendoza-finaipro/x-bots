@@ -1,6 +1,10 @@
 import { Logo } from "@/components/assets/icons";
-import { NavLink } from "react-router";
+import { Menu } from "lucide-react";
+import { Link, NavLink, useNavigate } from "react-router";
+import { userMockData } from "~/constants/data";
+import { auth } from "~/lib/auth";
 import { cn } from "~/lib/utils";
+import type { Route } from "../../routes/+types/_index";
 import { ThemeButton } from "../general/ThemeButton";
 import { Button } from "../ui/button";
 import {
@@ -10,25 +14,29 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { Menu } from "lucide-react";
-import { userMockData } from "~/constants/data";
+import { toast } from "sonner";
 
 const linkList = [
   { to: "/dashboard", label: "Mis bots" },
   { to: "/create-bot", label: "Fábrica de bots" },
 ];
 
-export const Header = () => {
+export const Header = ({ email }: { email: string }) => {
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    navigate("/otp");
+  };
+
   return (
     <header className="p-5 flex items-center justify-between container mx-auto">
-      
       <div className="flex items-center gap-12">
         <div className="flex gap-2 items-center">
           <Logo className="size-9" />
           <h1 className="font-bold">X-bots studio</h1>
         </div>
 
-        
         <div className="hidden md:flex gap-5 text-sm text-muted-foreground">
           {linkList.map(({ to, label }) => (
             <NavLink
@@ -44,14 +52,14 @@ export const Header = () => {
         </div>
       </div>
 
-      
       <div className="hidden md:flex gap-3 items-center">
         <ThemeButton variant="ghost" />
-        <span className="text-xs text-muted-foreground">{userMockData.name}</span>
-        <Button variant="secondary">Cerrar sesión</Button>
+        <span className="text-xs text-muted-foreground">{email}</span>
+        <Button variant="secondary" asChild>
+          <Link to="/otp">Cerrar sesión</Link>
+        </Button>
       </div>
 
-      
       <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -89,9 +97,13 @@ export const Header = () => {
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center">
                 <ThemeButton variant="outline" />
-                <span className="text-xs text-muted-foreground">{userMockData.name}</span>
+                <span className="text-xs text-muted-foreground">
+                  {email}
+                </span>
               </div>
-              <Button variant="secondary">Cerrar sesión</Button>
+              <Button variant="secondary" asChild>
+                <Link to="/otp">Cerrar sesión</Link>
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
