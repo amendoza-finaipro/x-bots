@@ -1,5 +1,6 @@
 export {
   addBotDocumentSchema,
+  getBotDetailSchema,
   attachmentSchema,
   createBotSchema,
   getDocumentsByBotSchema,
@@ -7,6 +8,7 @@ export {
 } from "./bot";
 export {
   getAllConversationsSchema,
+  createConversationSchema,
   deleteConversationSchema,
   getConversationByIdSchema,
   sendMessageSchema,

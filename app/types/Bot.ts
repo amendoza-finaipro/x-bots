@@ -1,5 +1,6 @@
 import type z from "zod";
 import type { attachmentSchema, createBotSchema } from "~/trpc/schemas";
+import type { updateBotSchema } from "~/trpc/schemas/bot";
 
 export interface Bot {
   id: string;
@@ -16,9 +17,9 @@ export interface Bot {
 export interface Config {
   temperature: number;
   max_tokens: number;
-  complexity: string;
-  response_length: string;
-  friendliness: string;
+  complexity: "simple" | "intermediate" | "advanced";
+  response_length: "short" | "medium" | "long";
+  friendliness: "neutral" | "friendly" | "formal";
   instructions: string;
 }
 
@@ -36,9 +37,18 @@ export interface Model {
   supports_reasoning: boolean;
 }
 
-export type BotBlueprint = z.infer<typeof createBotSchema>
+export type BotBlueprint = z.infer<typeof createBotSchema>;
 
-export type Attachment = z.infer<typeof attachmentSchema>
+export type Attachment = z.infer<typeof attachmentSchema>;
+
+export type UpdateBot = z.infer<typeof updateBotSchema>;
+
+export interface CreateBotOption {
+  title: string;
+  description?: string;
+  value: string;
+  imageUrl?: string;
+}
 
 export interface CreateBotResponse {
   blueprint: Blueprint;

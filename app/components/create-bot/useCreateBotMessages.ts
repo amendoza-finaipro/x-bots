@@ -1,4 +1,5 @@
 import { chatbotImage } from "@/components/assets/images";
+import { complexityOptions, friendlinessOptions, responseLengthOptions } from "~/constants";
 import { trpc } from "~/trpc/client";
 import type { MessageType } from "~/types";
 
@@ -40,23 +41,7 @@ export const useCreateBotMessages = () => {
         expectedAnswer: "selection",
         name: "Assistant",
         avatar: chatbotImage,
-        options: [
-          {
-            title: "Simple",
-            description: "Respuestas rápidas para tareas sencillas.",
-            value: "simple",
-          },
-          {
-            title: "Intermedia",
-            description: "Razonamiento equilibrado para la mayoría de flujos.",
-            value: "intermediate",
-          },
-          {
-            title: "Avanzada",
-            description: "Síntesis profunda para instrucciones complejas.",
-            value: "advanced",
-          },
-        ],
+        options: complexityOptions,
       },
       {
         key: 6,
@@ -64,23 +49,7 @@ export const useCreateBotMessages = () => {
         expectedAnswer: "selection",
         name: "Assistant",
         avatar: chatbotImage,
-        options: [
-          {
-            title: "Neutral",
-            description: "Tono directo y profesional.",
-            value: "neutral",
-          },
-          {
-            title: "Amigable",
-            description: "Personalidad cercana y entusiasta.",
-            value: "friendly",
-          },
-          {
-            title: "Formal",
-            description: "Estilo corporativo y estructurado.",
-            value: "formal",
-          },
-        ],
+        options: friendlinessOptions,
       },
       {
         key: 7,
@@ -88,23 +57,7 @@ export const useCreateBotMessages = () => {
         expectedAnswer: "selection",
         name: "Assistant",
         avatar: chatbotImage,
-        options: [
-          {
-            title: "Corta",
-            description: "De una a tres oraciones.",
-            value: "short",
-          },
-          {
-            title: "Media",
-            description: "Dos párrafos breves ideales para resúmenes.",
-            value: "medium",
-          },
-          {
-            title: "Larga",
-            description: "Respuestas detalladas con pasos y matices.",
-            value: "long",
-          },
-        ],
+        options: responseLengthOptions,
       },
       {
         key: 8,
