@@ -126,9 +126,9 @@ export const DocumentsModal = ({ isOpen, setIsOpen, botId }: Props) => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="ghost" asChild>
+                    {/* <Button variant="ghost" asChild>
                       <a href={document.blob_url} download>Descargar</a>
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="ghost"
                       onClick={() =>
