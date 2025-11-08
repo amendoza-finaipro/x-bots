@@ -26,7 +26,7 @@ export default function Home() {
     <>
       <Header email={session.user.email} />
       <div className="container mx-auto p-5">
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-wrap gap-4">
           <div className="flex flex-col gap-2">
             <h1 className="font-bold text-3xl">¡Bienvenido de nuevo, {session.user.email}!</h1>
             <span className="text-muted-foreground text-sm">

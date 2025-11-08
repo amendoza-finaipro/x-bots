@@ -22,10 +22,10 @@ export const Header = ({ email }: { email: string }) => {
   return (
     <header className="p-5 flex items-center justify-between container mx-auto">
       <div className="flex items-center gap-12">
-        <div className="flex gap-2 items-center">
+        <Link to="/dashboard" className="flex gap-2 items-center cursor-pointer">
           <Logo className="size-9" />
-          <h1 className="font-bold">X-bots studio</h1>
-        </div>
+          <h1 className="font-bold">X-Bots Studio</h1>
+        </Link>
 
         <div className="hidden md:flex gap-5 text-sm text-muted-foreground">
           {linkList.map(({ to, label }) => (

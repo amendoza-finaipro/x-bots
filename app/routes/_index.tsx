@@ -18,7 +18,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export function loader() {
-  return { docsUrl: `${env.BACKEND_BASE_URL}/scalar` };
+  const url = env.BACKEND_BASE_URL.replace("/api/v1", "");
+  return { docsUrl: `${url}/scalar` };
 }
 
 export default function Home() {
@@ -43,7 +44,7 @@ export default function Home() {
                 <Button
                   asChild
                   variant="outline"
-                  className="hidden sm:inline-flex"
+                  className="sm:inline-flex"
                 >
                   <Link to="/otp">Login</Link>
                 </Button>
