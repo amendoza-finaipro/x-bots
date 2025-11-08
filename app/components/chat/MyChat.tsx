@@ -10,7 +10,6 @@ import {
   MessageContent,
 } from "@/components/ui/shadcn-io/ai/message";
 import { SidebarTrigger } from "../ui/sidebar";
-import { userMockData } from "~/constants/data";
 import { MyPromptInput } from "./MyPromptInput";
 import { TypingIndicator } from "../ui/typing-indicator";
 import { useChat } from "./useChat";
@@ -76,7 +75,7 @@ interface ChatMessageProps {
 const ChatMessage = ({ content, role, isNew }: ChatMessageProps) => {
   const [name, avatar] =
     role === "user"
-      ? [userMockData.name, avatarIcon]
+      ? ["John Doe", avatarIcon]
       : ["assistant", chatbotImage];
 
   const { text: contentTyping } = useWriteText({ fullText: content });
